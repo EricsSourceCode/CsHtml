@@ -211,12 +211,11 @@ for( int count = 1; count < last; count++ )
 
 
 
-internal void processParagraphs()
+internal void makeStory( Story story )
 {
-mData.showStatus( "processParagraphs()" );
+mData.showStatus( " " );
+mData.showStatus( "makeStory()" );
 
-//  public const char BeginParagraph = '\x2709';
-//  public const char EndParagraph = '\x270A';
 //  public const char BeginAnchor = '\x270B';
 //  public const char EndAnchor = '\x270C';
 
@@ -245,9 +244,6 @@ for( int count = 1; count < last; count++ )
     continue;
 
   string para = paraParts.getStrAt( 0 );
-  if( Str.contains( para,
-                    "class=\"copyright\">" ))
-    continue;
 
   if( Str.contains( para,
                   "class=\"copyright\"" ) ||
@@ -259,20 +255,21 @@ for( int count = 1; count < last; count++ )
                "class=\"dek\"" ))
     continue;
 
-  if( !Str.contains( para, ">" ))
-    continue;
+  // Looking for the end of the parameter
+  // for the P tag.
+  // if( !Str.contains( para, ">" ))
+    // continue;
 
   para = Str.removeUpToC( para, '>' );
 
-  mData.showStatus( " " );
-  mData.showStatus( "para: " + para );
+  // mData.showStatus( " " );
+  // mData.showStatus( "para: " + para );
 
   para = fixAnchorText( para );
 
   mData.showStatus( " " );
-  mData.showStatus(
-                "After anchor fix: " + para );
-
+  mData.showStatus( para );
+  story.appendParaG( para );
   }
 }
 
