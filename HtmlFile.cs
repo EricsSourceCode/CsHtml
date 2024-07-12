@@ -33,13 +33,6 @@ private string javaS = "";
 private string cDataS = "";
 
 
-private const string tagTitleStart = "title";
-private const string tagTitleEnd = "/title";
-private const string tagHeadStart = "head";
-private const string tagHeadEnd = "/head";
-
-
-
 
 private HtmlFile()
 {
@@ -216,14 +209,11 @@ internal void makeStory( Story story )
 mData.showStatus( " " );
 mData.showStatus( "makeStory()" );
 
-//  public const char BeginAnchor = '\x270B';
-//  public const char EndAnchor = '\x270C';
-
 StrAr tagParts = new StrAr();
 tagParts.split( htmlS,
-                  MarkersAI.BeginParagraph );
+                  MarkersAI.BeginParagraphTag );
 int last = tagParts.getLast();
-mData.showStatus( "tagParts last: " + last );
+// mData.showStatus( "tagParts last: " + last );
 
 
 // string beforeFirst = tagParts.getStrAt( 0 );
@@ -237,7 +227,7 @@ for( int count = 1; count < last; count++ )
 
   StrAr paraParts = new StrAr();
   paraParts.split( line,
-                   MarkersAI.EndParagraph );
+                   MarkersAI.EndParagraphTag );
 
   int lastPara = paraParts.getLast();
   if( lastPara < 1 )
@@ -266,23 +256,69 @@ for( int count = 1; count < last; count++ )
   // mData.showStatus( "para: " + para );
 
   para = fixAnchorText( para );
+  para = fixSpanText( para );
 
-  mData.showStatus( " " );
-  mData.showStatus( para );
+  para = Str.replace( para, "<strong>", "" );
+  para = Str.replace( para, "</strong>", "" );
+  para = Str.replace( para, "<span>", "" );
+  para = Str.replace( para, "</span>", "" );
+  para = Str.replace( para, " ,", "," );
+
+  para = Str.trim( para );
+
+  string paraLow = Str.toLower( para );
+  if( Str.contains( paraLow, "biden" ))
+    {
+    mData.showStatus( " " );
+    mData.showStatus( para );
+    }
+
   story.appendParaG( para );
   }
 }
 
 
 
-private string fixAnchorText( string inS )
+
+private string fixSpanText( string inS )
 {
 if( !Str.contains( inS,
-                   "" + MarkersAI.BeginAnchor ))
+               "" + MarkersAI.BeginSpanTag ))
   return inS;
 
 StrAr paraParts = new StrAr();
-paraParts.split( inS, MarkersAI.BeginAnchor );
+paraParts.split( inS, MarkersAI.BeginSpanTag );
+int lastPara = paraParts.getLast();
+
+// if( lastPara < 2 )
+  // return inS;
+
+string result = paraParts.getStrAt( 0 ) + " ";
+
+for( int count = 1; count < lastPara; count++ )
+  {
+  string spanPart =
+              paraParts.getStrAt( count );
+
+  spanPart = Str.removeUpToC( spanPart, '>' );
+  result += spanPart;
+  }
+
+result = Str.replace( result, "  ", " " );
+return result;
+}
+
+
+
+
+private string fixAnchorText( string inS )
+{
+if( !Str.contains( inS,
+               "" + MarkersAI.BeginAnchorTag ))
+  return inS;
+
+StrAr paraParts = new StrAr();
+paraParts.split( inS, MarkersAI.BeginAnchorTag );
 int lastPara = paraParts.getLast();
 
 // if( lastPara < 2 )
@@ -296,7 +332,7 @@ for( int count = 1; count < lastPara; count++ )
               paraParts.getStrAt( count );
 
   if( !Str.contains( anchorPart,
-                     "" + MarkersAI.EndAnchor ))
+                  "" + MarkersAI.EndAnchorTag ))
     {
     return "No ending anchor match.";
     // result += anchorPart;
@@ -305,7 +341,7 @@ for( int count = 1; count < lastPara; count++ )
 
   StrAr anchorLines = new StrAr();
   anchorLines.split( anchorPart,
-                     MarkersAI.EndAnchor );
+                     MarkersAI.EndAnchorTag );
   int lastAnchor = anchorLines.getLast();
   if( lastAnchor < 2 )
     return "lastAnchor < 2";
@@ -332,129 +368,6 @@ result = Str.replace( result, "  ", " " );
 return result;
 }
 
-
-
-/*
-  public StrA getTitle()
-    {
-    boolean isInsideHeader = false;
-    boolean isInsideTitle = false;
-
-    StrArray tagParts = htmlS.splitChar( '<' );
-    final int last = tagParts.length();
-
-    StrA styleS = new StrA( "style" );
-    StrA metaS = new StrA( "meta" );
-    StrA linkS = new StrA( "link" );
-    StrA divS = new StrA( "div" );
-    StrA spanS = new StrA( "span" );
-    StrA cDashData = new StrA( "c-data" );
-
-    for( int count = 1; count < last; count++ )
-      {
-      StrA line = tagParts.getStrAt( count );
-
-      if( line.startsWith( styleS ))
-        continue;
-
-      if( line.startsWith( metaS ))
-        continue;
-
-      if( line.startsWith( linkS ))
-        continue;
-
-      if( line.startsWith( divS ))
-        continue;
-
-      if( line.startsWith( spanS ))
-        continue;
-
-      if( line.startsWith( cDashData ))
-        continue;
-
-      StrArray lineParts = line.splitChar( '>' );
-      final int lastPart = lineParts.length();
-      if( lastPart == 0 )
-        {
-        mApp.showStatusAsync(
- "The tag doesn't have any parts." );
-        mApp.showStatusAsync( "line: " + line );
-        return StrA.Empty;
-        }
-
-      if( lastPart > 2 )
-        {
-        // line: /span> Posting">Post comment
-
-     // mApp.showStatusAsync( "lastPart > 2." );
-     // mApp.showStatusAsync( "line: " + line );
-        // return;
-        }
-
-      StrA tag = lineParts.getStrAt( 0 );
-      if( tag.endsWithChar( '/' ))
-        {
-        // It's a short tag.
-        continue;
-        }
-
-      // mApp.showStatusAsync( "tag: " + tag );
-      StrArray tagAttr = tag.splitChar( ' ' );
-      final int lastAttr = tagAttr.length();
-      if( lastAttr == 0 )
-        {
-        mApp.showStatusAsync(
- "lastAttr is zero for the tag." );
-        mApp.showStatusAsync( "tag: " + tag );
-        return StrA.Empty;
-        }
-
-      StrA tagName = tagAttr.getStrAt( 0 );
-      tagName = tagName.toLowerCase();
-      // mApp.showStatusAsync(
-//  "\n\ntagName: " + tagName );
-
-      if( tagName.equalTo( TagHeadStart ))
-        {
-        isInsideHeader = true;
-        continue;
-        }
-
-      if( tagName.equalTo( TagHeadEnd ))
-        {
-        return StrA.Empty;
-        }
-
-      if( tagName.equalTo( TagTitleStart ))
-        isInsideTitle = true;
-
-      if( tagName.equalTo( TagTitleEnd ))
-        return StrA.Empty;
-
-      // Inside the div tag there can be
-// a title tag
-      // for that division.
-
-      if( isInsideTitle && isInsideHeader )
-        {
-        if( lastPart < 2 )
-          {
-          mApp.showStatusAsync(
-           "Title has no text: " +
-                         line );
-          return StrA.Empty;
-          }
-
-        StrA result = lineParts.getStrAt( 1 ).
-                      cleanUnicodeField().trim();
-
-        return fixAmpersandChars( result );
-        }
-      }
-
-    return StrA.Empty;
-    }
-*/
 
 
 
@@ -503,31 +416,36 @@ result = Str.replace( result, "<!--",
 result = Str.replace( result, "-->",
      "\r\n\r\n\r\n" + MarkersAI.EndHtmlComment );
 
+result = Str.replace( result, "<p>", "<p >" );
+
 // Don't want the <picture> tag.
 result = Str.replace( result, "<p ",
-               "" + MarkersAI.BeginParagraph );
+           "" + MarkersAI.BeginParagraphTag );
 
 result = Str.replace( result, "</p>",
-               "" + MarkersAI.EndParagraph );
+           "" + MarkersAI.EndParagraphTag );
 
 result = Str.replace( result, "<a ",
-               "" + MarkersAI.BeginAnchor );
+            "" + MarkersAI.BeginAnchorTag );
 
 result = Str.replace( result, "</a>",
-               "" + MarkersAI.EndAnchor );
+             "" + MarkersAI.EndAnchorTag );
+
+result = Str.replace( result, "<span ",
+             "" + MarkersAI.BeginSpanTag );
 
 // In case it is upper case.
 result = Str.replace( result, "<P ",
-               "" + MarkersAI.BeginParagraph );
+           "" + MarkersAI.BeginParagraphTag );
 
 result = Str.replace( result, "</P>",
-               "" + MarkersAI.EndParagraph );
+           "" + MarkersAI.EndParagraphTag );
 
 result = Str.replace( result, "<A ",
-               "" + MarkersAI.BeginAnchor );
+           "" + MarkersAI.BeginAnchorTag );
 
 result = Str.replace( result, "</A>",
-               "" + MarkersAI.EndAnchor );
+           "" + MarkersAI.EndAnchorTag );
 
 
 bool isInsideCData = false;
