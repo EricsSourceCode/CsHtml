@@ -58,9 +58,9 @@ internal void readFileS()
 if( fileName.Length == 0 )
   return;
 
-mData.showStatus( " " );
-mData.showStatus( "Reading: " + fileName );
-mData.showStatus( "Came from URL " + fromUrl );
+// mData.showStatus( " " );
+// mData.showStatus( "Reading: " + fileName );
+// mData.showStatus( "Came from URL " + fromUrl );
 
 if( !SysIO.fileExists( fileName ))
   {
@@ -204,10 +204,11 @@ for( int count = 1; count < last; count++ )
 
 
 
-internal void makeStory( Story story )
+internal void makeStory( Story story,
+                         string toFind )
 {
-mData.showStatus( " " );
-mData.showStatus( "makeStory()" );
+// mData.showStatus( " " );
+// mData.showStatus( "makeStory()" );
 
 StrAr tagParts = new StrAr();
 tagParts.split( htmlS,
@@ -267,7 +268,7 @@ for( int count = 1; count < last; count++ )
   para = Str.trim( para );
 
   string paraLow = Str.toLower( para );
-  if( Str.contains( paraLow, "biden" ))
+  if( Str.contains( paraLow, toFind ))
     {
     mData.showStatus( " " );
     mData.showStatus( para );
