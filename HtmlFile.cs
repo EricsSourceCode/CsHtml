@@ -22,7 +22,8 @@ public class HtmlFile
 private MainData mData;
 private string fileName = "";
 private string fileS = "";
-
+private string linkDate = "";
+private string linkText = "";
 // Where this HTML file came from:
 private string fromUrl = "";
 private Paragraph paragraph;
@@ -41,13 +42,17 @@ private HtmlFile()
 
 public HtmlFile( MainData useMData,
                  string useUrl,
-                 string fileNameToUse )
+                 string fileNameToUse,
+                 string linkDateToUse,
+                 string linkTextToUse )
 {
 mData = useMData;
 fromUrl = useUrl;
 urlParse = new UrlParse( mData, fromUrl );
 paragraph = new Paragraph( mData, fromUrl );
 fileName = fileNameToUse;
+linkDate = linkDateToUse;
+linkText = linkTextToUse;
 }
 
 
@@ -204,11 +209,16 @@ for( int count = 1; count < last; count++ )
 
 
 
-internal void makeStory( Story story,
+internal int makeStory( Story story,
                          string toFind )
 {
+int paraCount = 0;
+
 // mData.showStatus( " " );
 // mData.showStatus( "makeStory()" );
+mData.showStatus( " " );
+mData.showStatus( "Link date: " + linkDate );
+// mData.showStatus( "Link Text: " + linkText );
 
 StrAr tagParts = new StrAr();
 tagParts.split( htmlS,
@@ -264,18 +274,23 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "<span>", "" );
   para = Str.replace( para, "</span>", "" );
   para = Str.replace( para, " ,", "," );
+  para = Str.replace( para, "  ", " " );
 
   para = Str.trim( para );
 
   string paraLow = Str.toLower( para );
   if( Str.contains( paraLow, toFind ))
     {
+    paraCount++;
     mData.showStatus( " " );
     mData.showStatus( para );
     }
 
+  // paraCount++;
   story.appendParaG( para );
   }
+
+return paraCount;
 }
 
 
