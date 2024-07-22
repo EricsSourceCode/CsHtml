@@ -216,8 +216,9 @@ int paraCount = 0;
 
 // mData.showStatus( " " );
 // mData.showStatus( "makeStory()" );
-mData.showStatus( " " );
-mData.showStatus( "Link date: " + linkDate );
+
+// mData.showStatus( " " );
+// mData.showStatus( "Link date: " + linkDate );
 // mData.showStatus( "Link Text: " + linkText );
 
 StrAr tagParts = new StrAr();
@@ -234,7 +235,9 @@ int last = tagParts.getLast();
 for( int count = 1; count < last; count++ )
   {
   string line = tagParts.getStrAt( count );
-  // mData.showStatus( "line: " + line );
+
+  // ==== What is missing after the span tag?
+  mData.showStatus( "line: " + line );
 
   StrAr paraParts = new StrAr();
   paraParts.split( line,
@@ -267,14 +270,22 @@ for( int count = 1; count < last; count++ )
   // mData.showStatus( "para: " + para );
 
   para = fixAnchorText( para );
+
+// In this? =======
   para = fixSpanText( para );
+
+/*
+What is missing after something like <i ?
 
   para = Str.replace( para, "<strong>", "" );
   para = Str.replace( para, "</strong>", "" );
   para = Str.replace( para, "<span>", "" );
   para = Str.replace( para, "</span>", "" );
+  para = Str.replace( para, "<em>", "" );
+  para = Str.replace( para, "</em>", "" );
   para = Str.replace( para, " ,", "," );
   para = Str.replace( para, "  ", " " );
+*/
 
   para = Str.trim( para );
 
