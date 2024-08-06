@@ -1,3 +1,5 @@
+/*
+
 // Copyright Eric Chauvin 2024.
 
 
@@ -58,3 +60,6 @@ paraStr = "";
 
 
 } // Class
+
+*/
+

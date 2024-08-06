@@ -22,11 +22,11 @@ public class HtmlFile
 private MainData mData;
 private string fileName = "";
 private string fileS = "";
-private string linkDate = "";
+private TimeEC linkDate;
 private string linkText = "";
 // Where this HTML file came from:
 private string fromUrl = "";
-private Paragraph paragraph;
+// private Paragraph paragraph;
 private UrlParse urlParse;
 private string markedUpS = "";
 private string htmlS = "";
@@ -43,15 +43,15 @@ private HtmlFile()
 public HtmlFile( MainData useMData,
                  string useUrl,
                  string fileNameToUse,
-                 string linkDateToUse,
+                 ulong linkDateIndex,
                  string linkTextToUse )
 {
 mData = useMData;
 fromUrl = useUrl;
 urlParse = new UrlParse( mData, fromUrl );
-paragraph = new Paragraph( mData, fromUrl );
+// paragraph = new Paragraph( mData, fromUrl );
 fileName = fileNameToUse;
-linkDate = linkDateToUse;
+linkDate = new TimeEC( linkDateIndex );
 linkText = linkTextToUse;
 }
 
@@ -210,16 +210,11 @@ for( int count = 1; count < last; count++ )
 
 
 internal int makeStory( Story story,
-                         string toFind )
+                        string toFind )
 {
 int paraCount = 0;
 
-// mData.showStatus( " " );
-// mData.showStatus( "makeStory()" );
-
-// mData.showStatus( " " );
-// mData.showStatus( "Link date: " + linkDate );
-// mData.showStatus( "Link Text: " + linkText );
+// story.showStory();
 
 StrAr tagParts = new StrAr();
 tagParts.split( htmlS,
@@ -236,8 +231,7 @@ for( int count = 1; count < last; count++ )
   {
   string line = tagParts.getStrAt( count );
 
-  // ==== What is missing after the span tag?
-  mData.showStatus( "line: " + line );
+  // mData.showStatus( "line: " + line );
 
   StrAr paraParts = new StrAr();
   paraParts.split( line,
@@ -256,7 +250,9 @@ for( int count = 1; count < last; count++ )
     Str.contains( para,
                "class=\"success hide\"" ) ||
     Str.contains( para,
-               "class=\"dek\"" ))
+               "class=\"dek\"" ) ||
+    Str.contains( para,
+      ".foxnews.com/download" ))
     continue;
 
   // Looking for the end of the parameter
@@ -269,25 +265,30 @@ for( int count = 1; count < last; count++ )
   // mData.showStatus( " " );
   // mData.showStatus( "para: " + para );
 
+  // mData.showStatus( " " );
+  // mData.showStatus( "para: " + para );
+
   para = fixAnchorText( para );
 
-// In this? =======
+  // mData.showStatus( " " );
+  // mData.showStatus( "After anchors: " + para );
+
   para = fixSpanText( para );
 
-/*
-What is missing after something like <i ?
-
   para = Str.replace( para, "<strong>", "" );
+  para = Str.replace( para, "<strong", "" );
   para = Str.replace( para, "</strong>", "" );
-  para = Str.replace( para, "<span>", "" );
   para = Str.replace( para, "</span>", "" );
   para = Str.replace( para, "<em>", "" );
   para = Str.replace( para, "</em>", "" );
   para = Str.replace( para, " ,", "," );
   para = Str.replace( para, "  ", " " );
-*/
+  para = Str.replace( para, "  ", " " );
+  para = Str.replace( para, "  ", " " );
 
   para = Str.trim( para );
+  if( para.Length == 0 )
+    continue;
 
   string paraLow = Str.toLower( para );
   if( Str.contains( paraLow, toFind ))
@@ -309,31 +310,42 @@ return paraCount;
 
 private string fixSpanText( string inS )
 {
-if( !Str.contains( inS,
-               "" + MarkersAI.BeginSpanTag ))
+if( !Str.contains( inS, "<span" ))
   return inS;
 
-StrAr paraParts = new StrAr();
-paraParts.split( inS, MarkersAI.BeginSpanTag );
-int lastPara = paraParts.getLast();
+string result = inS;
 
-// if( lastPara < 2 )
-  // return inS;
+result = Str.replace( result, "<span>",
+                              "<span >" );
 
-string result = paraParts.getStrAt( 0 ) + " ";
+// It could have a tag like <span >
+// or a tag like:
+// <span class="video-details__dek-description">
 
-for( int count = 1; count < lastPara; count++ )
+result = Str.replace( result, "<span ",
+             "" + MarkersAI.BeginSpanTag );
+
+StrAr spanParts = new StrAr();
+spanParts.split( result,
+                 MarkersAI.BeginSpanTag );
+int lastSpan = spanParts.getLast();
+
+result = spanParts.getStrAt( 0 ) + " ";
+
+for( int count = 1; count < lastSpan; count++ )
   {
   string spanPart =
-              paraParts.getStrAt( count );
+              spanParts.getStrAt( count );
 
   spanPart = Str.removeUpToC( spanPart, '>' );
-  result += spanPart;
+  result += " " + spanPart;
   }
 
 result = Str.replace( result, "  ", " " );
+result = Str.replace( result, "  ", " " );
 return result;
 }
+
 
 
 
@@ -457,9 +469,6 @@ result = Str.replace( result, "<a ",
 
 result = Str.replace( result, "</a>",
              "" + MarkersAI.EndAnchorTag );
-
-result = Str.replace( result, "<span ",
-             "" + MarkersAI.BeginSpanTag );
 
 // In case it is upper case.
 result = Str.replace( result, "<P ",
