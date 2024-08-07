@@ -209,13 +209,8 @@ for( int count = 1; count < last; count++ )
 
 
 
-internal int makeStory( Story story,
-                        string toFind )
+internal bool makeStory( Story story )
 {
-int paraCount = 0;
-
-// story.showStory();
-
 StrAr tagParts = new StrAr();
 tagParts.split( htmlS,
                   MarkersAI.BeginParagraphTag );
@@ -282,6 +277,12 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "<em>", "" );
   para = Str.replace( para, "</em>", "" );
   para = Str.replace( para, " ,", "," );
+  para = Str.replace( para, "\r", " " );
+  para = Str.replace( para, "\n", " " );
+  para = Str.replace( para, "\t", " " );
+
+  para = Str.cleanAscii( para );
+
   para = Str.replace( para, "  ", " " );
   para = Str.replace( para, "  ", " " );
   para = Str.replace( para, "  ", " " );
@@ -290,19 +291,13 @@ for( int count = 1; count < last; count++ )
   if( para.Length == 0 )
     continue;
 
-  string paraLow = Str.toLower( para );
-  if( Str.contains( paraLow, toFind ))
-    {
-    paraCount++;
-    mData.showStatus( " " );
-    mData.showStatus( para );
-    }
-
-  // paraCount++;
   story.appendParaG( para );
   }
 
-return paraCount;
+if( story.getParaLast() > 0 )
+  return true;
+
+return false;
 }
 
 
