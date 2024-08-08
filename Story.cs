@@ -22,10 +22,10 @@ public class Story
 {
 private MainData mData;
 private string linkText = "";
+// DateTime when it was downloaded.
 private TimeEC linkDate;
 private string urlFrom = "";
-private StrAr paraAr;
-// DateTime when it was downloaded.
+private string parags = "";
 
 
 
@@ -46,21 +46,15 @@ urlFrom = useURL;
 linkDate = new TimeEC( dateIndex );
 linkText = Str.cleanAscii( useLinkText );
 linkText = Str.trim( linkText );
-paraAr = new StrAr();
 }
 
 
 
 internal void appendParaG( string para )
 {
-paraAr.append( para );
+parags += para + MarkersAI.StoryParagDelim;
 }
 
-
-internal int getParaLast()
-{
-return paraAr.getLast();
-}
 
 
 
@@ -73,6 +67,10 @@ mData.showStatus( "Link date: " +
 mData.showStatus( "Link Text: " + linkText );
 mData.showStatus( "URL: " + urlFrom );
 mData.showStatus( " " );
+
+StrAr paraAr = new StrAr();
+paraAr.split( parags,
+              MarkersAI.StoryParagDelim );
 
 int last = paraAr.getLast();
 for( int count = 0; count < last; count++ )
@@ -94,17 +92,10 @@ string result = urlFrom +
                 linkDate.toDelimStr() +
                 MarkersAI.StoryDelim +
                 linkText +
+                MarkersAI.StoryDelim +
+                parags +
                 MarkersAI.StoryDelim;
 
-string paraGraphs = "";
-int last = paraAr.getLast();
-for( int count = 0; count < last; count++ )
-  {
-  paraGraphs += paraAr.getStrAt( count ) +
-                MarkersAI.StoryParagDelim;
-  }
-
-result += paraGraphs + MarkersAI.StoryDelim;
 return result;
 }
 
@@ -132,7 +123,7 @@ internal void clear()
 linkDate.setToYear1900();
 urlFrom = "";
 linkText = "";
-paraAr.clear();
+parags = "";
 }
 
 
@@ -142,9 +133,15 @@ internal void copy( Story toCopy )
 linkDate.copy( toCopy.linkDate );
 urlFrom = toCopy.urlFrom;
 linkText = toCopy.linkText;
-paraAr.copy( toCopy.paraAr );
+parags = toCopy.parags;
 }
 
+
+
+internal string getParags()
+{
+return parags;
+}
 
 
 

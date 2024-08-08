@@ -238,18 +238,6 @@ for( int count = 1; count < last; count++ )
 
   string para = paraParts.getStrAt( 0 );
 
-  if( Str.contains( para,
-                  "class=\"copyright\"" ) ||
-    Str.contains( para,
-               "class=\"subscribed hide\"" ) ||
-    Str.contains( para,
-               "class=\"success hide\"" ) ||
-    Str.contains( para,
-               "class=\"dek\"" ) ||
-    Str.contains( para,
-      ".foxnews.com/download" ))
-    continue;
-
   // Looking for the end of the parameter
   // for the P tag.
   // if( !Str.contains( para, ">" ))
@@ -281,6 +269,11 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "\n", " " );
   para = Str.replace( para, "\t", " " );
 
+  para = Ampersand.fixChars( para );
+
+  para = fixNonAscii( para );
+  showNonAscii( para );
+
   para = Str.cleanAscii( para );
 
   para = Str.replace( para, "  ", " " );
@@ -291,10 +284,13 @@ for( int count = 1; count < last; count++ )
   if( para.Length == 0 )
     continue;
 
+  if( !GoodParag.isGoodParag( para ))
+    continue;
+
   story.appendParaG( para );
   }
 
-if( story.getParaLast() > 0 )
+if( story.getParags().Length > 0 )
   return true;
 
 return false;
@@ -575,6 +571,58 @@ cDataS = cDataBuild.toString();
 // mData.showStatus( "cData:" );
 // mData.showStatus( cDataS );
 }
+
+
+
+private void showNonAscii( string toCheck )
+{
+int max = toCheck.Length;
+for( int count = 0; count < max; count++ )
+  {
+  char c = toCheck[count];
+  if( c > 127 )
+    {
+    int showC = c;
+    mData.showStatus( "showC: " + showC + ") " +
+                                 c );
+    }
+  }
+}
+
+
+
+private string fixNonAscii( string inS )
+{
+string result = "";
+
+int max = inS.Length;
+for( int count = 0; count < max; count++ )
+  {
+  char c = inS[count];
+  if( c == 160 ) // non breaking space?
+    c = ' ';   
+
+  if( c == 8211 ) // dash or hyphen?
+    c = '-';   
+
+  if( c == 8212 ) // dash or hyphen?
+    c = '-';   
+
+  if( c == 8217 ) // single quote, apostrophe.
+    c = '\'';   
+
+  if( c == 8220 )
+    c = '\"';   
+
+  if( c == 8221 )
+    c = '\"';   
+
+
+  result += c;
+  }
+
+return result;
+} 
 
 
 

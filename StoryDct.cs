@@ -260,7 +260,6 @@ for( int count = 0; count < last; count++ )
 */
 
 
-
 /*
 internal void htmlSearch( string toFindUrl,
                           string toFind,
@@ -367,6 +366,131 @@ mData.showStatus( "\r\nParagraph count: " +
                                  paraCount );
 }
 */
+
+
+
+internal void writeFileS( string toWrite )
+{
+string fileName = mData.getStoriesFileName();
+
+if( !SysIO.directoryExists( 
+                  mData.getDataDirectory()))
+  {
+  mData.showStatus( "No data directory." );
+  return;
+  }
+
+mData.showStatus( " " );
+mData.showStatus( "Writing: " + fileName );
+
+SysIO.writeAllText( fileName, toWrite );
+}
+
+
+
+internal void writeAllToFile()
+{
+SBuilder sBuild = new SBuilder();
+
+mData.showStatus( "Writing stories to file." );
+
+// Don't write really old ones:
+// TimeEC timeEC = new TimeEC();
+// TimeEC oldTime = new TimeEC();
+// oldTime.setToNow();
+// oldTime.addDays( daysBack );
+// ulong oldIndex = oldTime.getIndex();
+
+for( int count = 0; count < keySize; count++ )
+  {
+  if( (count % 20) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  // if( howMany > 20 )
+    // break;
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  // mData.showStatus( "Last: " + last );
+  for( int countR = 0; countR < last; countR++ )
+    {
+/*
+    lineArray[count].getCopyURLFileAt(
+                                    urlFile,
+                                    countR );
+
+    ulong linkDateIndex = urlFile.getDateIndex();
+
+    if( linkDateIndex < oldIndex )
+      continue;
+
+    // if( urlFile.getYear() < 2024 )
+      // continue;
+
+    string url = urlFile.getUrl();
+    string urlFrom = url;
+    url = Str.toLower( url );
+
+    if( !Str.contains( url, toFindUrl ))
+      continue;
+
+
+    string linkText = urlFile.getLinkText();
+
+    string fileName = urlFile.getFileName();
+    string fullPath = mData.
+                    getOldDataDirectory() +
+                    "URLFiles\\" + fileName;
+
+    if( !SysIO.fileExists( fullPath ))
+      continue;
+
+    HtmlFile htmlFile = new HtmlFile( mData,
+                                urlFrom,
+                                fullPath,
+                                linkDateIndex,
+                                linkText );
+
+    htmlFile.readFileS();
+    htmlFile.markupSections();
+    // htmlFile.processNewAnchorTags();
+
+    Story story = new Story( mData, urlFrom,
+                  linkDateIndex, linkText );
+
+
+    int paraCountOne = htmlFile.makeStory( story,
+                                     toFind );
+
+
+    paraCount += paraCountOne;
+
+    story.showStory();
+
+    // if( paraCountOne > 0 )
+      // {
+      // mData.showStatus( "linkDate: " + linkDate );
+      // mData.showStatus( "urlFrom: " + urlFrom );
+      // mData.showStatus( " " );
+      // }
+
+    howMany++;
+*/
+    }
+  }
+
+
+string toWrite = "Test this.";
+writeFileS( toWrite );
+
+mData.showStatus( "Finished writing file." );
+}
 
 
 

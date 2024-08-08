@@ -24,6 +24,7 @@ public static string fixChars( string inS )
 {
 string result = inS;
 
+result = Str.replace( result, "&copy;", "(c)" );
 result = Str.replace( result, "&nbsp;", " " );
 result = Str.replace( result, "&#x27;", "'" );
 result = Str.replace( result, "&#39;", "'" );
