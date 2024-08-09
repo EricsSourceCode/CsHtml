@@ -600,29 +600,164 @@ for( int count = 0; count < max; count++ )
   {
   char c = inS[count];
   if( c == 160 ) // non breaking space?
-    c = ' ';   
+    c = ' ';
+
+  if( c == 167 ) // strange character
+    c = '#';
+
+  if( c == 169 ) // Copyright
+    c = '#';
+
+  if( c == 174 ) // Rights symbol
+    c = '#';
+
+  if( c == 176 ) // Little circle
+    c = '#';
+
+  if( c == 177 ) // +- symbol
+    c = '#';
+
+  if( c == 180 ) // apostrophe
+    c = '\'';
+
+  if( c == 188 ) // 1/4 symbol
+    c = '#';
+
+  if( c == 189 ) // 1/2 symbol
+    c = '#';
+
+  if( c == 190 ) // 3/4 symbol
+    c = '#';
+
+  if( c == 224 ) // a with ' mark.
+    c = 'a';
+
+  if( c == 225 ) // a with ' mark.
+    c = 'a';
+
+  if( c == 231 ) // c with under mark.
+    c = 'c';
+
+  if( c == 232 ) // e with ' mark.
+    c = 'e';
+
+  if( c == 233 ) // e with ' mark.
+    c = 'e';
+
+  if( c == 234 ) // e with hat.
+    c = 'e';
+
+  if( c == 235 ) // e two dots.
+    c = 'e';
+
+  if( c == 237 ) // i with slanted dot.
+    c = 'i';
+
+  if( c == 238 ) // i with hat.
+    c = 'i';
+
+  if( c == 239 ) // i with two dots.
+    c = 'i';
+
+  if( c == 241 ) // n with tilde.
+    c = 'n';
+
+  if( c == 243 ) // o with '.
+    c = 'o';
+
+  if( c == 244 ) // o with hat.
+    c = 'o';
+
+  if( c == 248 ) // Sort of a Phi.
+    c = '#';
+
+  if( c == 249 ) // u with '.
+    c = 'u';
+
+  if( c == 251 ) // u with hat.
+    c = 'u';
+
+  if( c == 263 ) // c with '.
+    c = 'c';
+
+  if( c == 268 ) // C with reverse hat.
+    c = 'C';
+
+  if( c == 283 ) // e with reverse hat.
+    c = 'e';
+
+  if( c == 287 ) // g with reverse hat.
+    c = 'g';
+
+  if( c == 333 ) // o with dash on top.
+    c = 'o';
+
+  if( c == 699 ) 
+    c = '\'';
+
+  if( c == 1057 ) 
+    c = 'C';
+
+  if( c == 8201 ) // Not showing.
+    c = '#';
+
+  if( c == 8202 ) // Not showing.
+    c = '#';
+
+  if( c == 8203 ) // Not showing.
+    c = '#';
 
   if( c == 8211 ) // dash or hyphen?
-    c = '-';   
+    c = '-';
 
   if( c == 8212 ) // dash or hyphen?
-    c = '-';   
+    c = '-';
+
+  if( c == 8213 ) // dash or hyphen?
+    c = '-';
+
+  if( c == 8216 ) // single quote, apostrophe.
+    c = '\'';
 
   if( c == 8217 ) // single quote, apostrophe.
-    c = '\'';   
+    c = '\'';
 
   if( c == 8220 )
-    c = '\"';   
+    c = '\"';
 
   if( c == 8221 )
-    c = '\"';   
+    c = '\"';
+
+  if( c == 8226 ) // a Dot.
+    c = '#';
+
+  if( c == 8230 ) // 3 dots like ...
+    c = '#';
+
+  if( c == 8239 ) // Not showing.
+    c = '#';
+
+  if( c == 8294 ) // Says LRI.
+    c = '#';
+
+  if( c == 8364 ) // Euro?
+    c = '#';
+
+  if( c == 8457 ) // Farenheit degrees.
+    c = 'F';
+
+  if( c == 8531 ) // 1/3 symbol
+    c = '#';
+
+  if( c == 9654 ) // A triangle symbol
+    c = '#';
 
 
   result += c;
   }
 
 return result;
-} 
+}
 
 
 

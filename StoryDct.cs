@@ -21,7 +21,7 @@ public class StoryDct
 {
 private MainData mData;
 private StoryDctLine[] lineArray;
-private const int keySize = 0xFF;
+private const int keySize = 0xFFF;
 private ByteBuf resultHash;
 private ByteBuf message;
 
@@ -58,14 +58,14 @@ catch( Exception Except )
 
 
 
-void freeAll()
+internal void freeAll()
 {
 // lineArray = null;
 }
 
 
 
-void clear()
+internal void clear()
 {
 for( int count = 0; count < keySize; count++ )
   lineArray[count].clear();
@@ -90,6 +90,10 @@ index |= resultHash.getU8( 1 );
 
 index = index & keySize;
 if( index == keySize )
+  index = keySize - 1;
+
+/*
+make this distribution thing work right...
   {
   // Distribute those last two at keySize
   // and keySize - 1 more evenly.
@@ -98,6 +102,7 @@ if( index == keySize )
   byte lastByte = message.getU8( lastB - 1 );
   index = index - lastByte;
   }
+*/
 
 return index;
 }
@@ -150,41 +155,6 @@ lineArray[index].getValue( key, toGet );
 
 
 /*
-  public StrA makeKeysValuesStrA()
-    {
-    try
-    {
-    StrABld sBld = new StrABld( 1024 * 64 );
-
-    for( int count = 0; count < keySize; count++ )
-      {
-      if( lineArray[count] == null )
-        continue;
-
-      StrA lines = lineArray[count].
-                                 makeKeysValuesStrA();
-
-      if( lines.length() == 0 )
-        continue;
-
-      // mApp.showStatusAsync( "At " + count +
-      //                " length: " + lines.length() );
-
-
-      sBld.appendStrA( lines );
-      }
-
-    return sBld.toStrA();
-    }
-    catch( Exception e )
-      {
-      mApp.showStatusAsync( "Exception in URLFileDictionary.makeKeysValuesStrA():\n" );
-      mApp.showStatusAsync( e.getMessage() );
-      return StrA.Empty;
-      }
-    }
-
-
 
   public boolean keyExists( StrA key )
     {
@@ -217,47 +187,52 @@ lineArray[index].getValue( key, toGet );
 
 
 
-
-/*
-internal void readFromFile( string fileName )
+internal void readAllFromFile()
 {
-// mData.showStatus( fileName );
-
 clear();
 
-string fileStr = SysIO.readAllText( fileName );
+string fileName = mData.getStoriesFileName();
+
+mData.showStatus( "Reading file:" );
+mData.showStatus( fileName );
+
+if( !SysIO.directoryExists(
+                  mData.getDataDirectory()))
+  {
+  mData.showStatus( "No data directory." );
+  return;
+  }
+
+string fileS = SysIO.readAllText( fileName );
 
 StrAr lines = new StrAr();
-lines.split( fileStr, '\n' );
+lines.split( fileS, MarkersAI.StoryListDelim );
 int last = lines.getLast();
 
-// mData.showStatus( "Links: " + last );
+mData.showStatus( "Stories: " + last );
 
 for( int count = 0; count < last; count++ )
   {
   string line = lines.getStrAt( count );
-  line = Str.trim( line );
+  // line = Str.trim( line );
 
-  URLFile urlFile = new URLFile( mData );
-  urlFile.setFromStr( line );
+  Story story = new Story( mData );
+  if( !story.setFromString( line ))
+    continue;
 
-  string url = urlFile.getUrl();
-  // mData.showStatus( urlFile.toString());
-
+  string url = story.getUrl();
   int index = getIndex( url );
+
+  // mData.showStatus( "url: " + url );
   // mData.showStatus( "index: " + index );
   // if( count > 50 )
     // break;
 
-  lineArray[index].setValue( urlFile );
-
-  // URLFile testUrlFile = new URLFile( mData );
-  // getValue( url, testUrlFile );
-  // mData.showStatus( "here: " );
-  // mData.showStatus( testUrlFile.toString());
+  lineArray[index].setValue( story );
   }
 }
-*/
+
+
 
 
 /*
@@ -373,7 +348,7 @@ internal void writeFileS( string toWrite )
 {
 string fileName = mData.getStoriesFileName();
 
-if( !SysIO.directoryExists( 
+if( !SysIO.directoryExists(
                   mData.getDataDirectory()))
   {
   mData.showStatus( "No data directory." );
@@ -401,6 +376,9 @@ mData.showStatus( "Writing stories to file." );
 // oldTime.addDays( daysBack );
 // ulong oldIndex = oldTime.getIndex();
 
+Story story = new Story( mData );
+
+int howMany = 0;
 for( int count = 0; count < keySize; count++ )
   {
   if( (count % 20) == 0 )
@@ -420,75 +398,24 @@ for( int count = 0; count < keySize; count++ )
   // mData.showStatus( "Last: " + last );
   for( int countR = 0; countR < last; countR++ )
     {
-/*
-    lineArray[count].getCopyURLFileAt(
-                                    urlFile,
-                                    countR );
+    lineArray[count].getCopyStoryAt( story,
+                                     countR );
 
-    ulong linkDateIndex = urlFile.getDateIndex();
-
-    if( linkDateIndex < oldIndex )
-      continue;
-
-    // if( urlFile.getYear() < 2024 )
+    // ulong dateIndex = story.getDateIndex();
+    // if( dateIndex < oldIndex )
       // continue;
 
-    string url = urlFile.getUrl();
-    string urlFrom = url;
-    url = Str.toLower( url );
-
-    if( !Str.contains( url, toFindUrl ))
-      continue;
-
-
-    string linkText = urlFile.getLinkText();
-
-    string fileName = urlFile.getFileName();
-    string fullPath = mData.
-                    getOldDataDirectory() +
-                    "URLFiles\\" + fileName;
-
-    if( !SysIO.fileExists( fullPath ))
-      continue;
-
-    HtmlFile htmlFile = new HtmlFile( mData,
-                                urlFrom,
-                                fullPath,
-                                linkDateIndex,
-                                linkText );
-
-    htmlFile.readFileS();
-    htmlFile.markupSections();
-    // htmlFile.processNewAnchorTags();
-
-    Story story = new Story( mData, urlFrom,
-                  linkDateIndex, linkText );
-
-
-    int paraCountOne = htmlFile.makeStory( story,
-                                     toFind );
-
-
-    paraCount += paraCountOne;
-
-    story.showStory();
-
-    // if( paraCountOne > 0 )
-      // {
-      // mData.showStatus( "linkDate: " + linkDate );
-      // mData.showStatus( "urlFrom: " + urlFrom );
-      // mData.showStatus( " " );
-      // }
+    sBuild.appendStr( story.toString() +
+                      MarkersAI.StoryListDelim );
 
     howMany++;
-*/
     }
   }
 
-
-string toWrite = "Test this.";
+string toWrite = sBuild.toString();
 writeFileS( toWrite );
 
+mData.showStatus( "Stories: " + howMany );
 mData.showStatus( "Finished writing file." );
 }
 

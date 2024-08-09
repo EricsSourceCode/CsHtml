@@ -35,6 +35,14 @@ private Story()
 
 
 
+internal Story( MainData mDataToUse )
+{
+mData = mDataToUse;
+linkDate = new TimeEC();
+}
+
+
+
 
 internal Story( MainData mDataToUse,
                 string useURL,
@@ -82,6 +90,27 @@ for( int count = 0; count < last; count++ )
 mData.showStatus( " " );
 }
 
+
+
+internal bool setFromString( string inS )
+{
+StrAr parts = new StrAr();
+parts.split( inS, MarkersAI.StoryDelim );
+int last = parts.getLast();
+
+if( last < 4 )
+  {
+  // mData.showStatus(
+  //         "Story: Not enough fields." );
+  return false;
+  }
+
+urlFrom = parts.getStrAt( 0 );
+linkDate.setFromDelim( parts.getStrAt( 1 ));
+linkText = parts.getStrAt( 2 );
+parags = parts.getStrAt( 3 );
+return true;
+}
 
 
 

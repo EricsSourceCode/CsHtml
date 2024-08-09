@@ -43,7 +43,7 @@ if( para == "featured shows" )
 
 if( para == "weekday shows" )
   return false;
- 
+
 if( para == "weekend shows" )
   return false;
 
