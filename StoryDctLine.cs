@@ -125,6 +125,16 @@ return -1;
 
 
 
+internal bool keyExists( string url )
+{
+if( getIndexOfUrl( url ) < 0 )
+  return false;
+
+return true;
+}
+
+
+
 
 internal void setValue( Story value )
 {
@@ -167,7 +177,7 @@ story.copy( valueArray[index] );
 
 
 internal void getCopyStoryAt( Story story,
-                                int where )
+                              int where )
 {
 story.clear();
 

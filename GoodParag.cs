@@ -38,6 +38,11 @@ if( Str.contains( para,
       ".foxnews.com/download" ))
   return false;
 
+if( Str.contains( para,
+    "This material may not be published, " +
+    "broadcast, rewritten, or redistributed." ))
+return false;
+
 if( para == "featured shows" )
   return false;
 

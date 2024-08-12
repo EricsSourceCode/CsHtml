@@ -692,10 +692,10 @@ for( int count = 0; count < max; count++ )
   if( c == 333 ) // o with dash on top.
     c = 'o';
 
-  if( c == 699 ) 
+  if( c == 699 )
     c = '\'';
 
-  if( c == 1057 ) 
+  if( c == 1057 )
     c = 'C';
 
   if( c == 8201 ) // Not showing.
@@ -738,6 +738,9 @@ for( int count = 0; count < max; count++ )
     c = '#';
 
   if( c == 8294 ) // Says LRI.
+    c = '#';
+
+  if( c == 8297 ) // Says PDI.
     c = '#';
 
   if( c == 8364 ) // Euro?

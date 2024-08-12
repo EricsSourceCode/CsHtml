@@ -174,4 +174,18 @@ return parags;
 
 
 
+internal ulong getDateIndex()
+{
+return linkDate.getIndex();
+}
+
+
+
+internal string getLinkText()
+{
+return linkText;
+}
+
+
+
 } // Class

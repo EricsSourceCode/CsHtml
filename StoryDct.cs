@@ -76,6 +76,9 @@ for( int count = 0; count < keySize; count++ )
 
 internal int getIndex( string url )
 {
+url = Str.trim( url );
+url = Str.toLower( url );
+
 if( url.Length == 0 )
   return 0;
 
@@ -117,8 +120,9 @@ try
 if( key == null )
   return;
 
-key = Str.toLower( key );
-if( key == "" )
+key = Str.trim( key );
+
+if( key.Length < 1 )
   return;
 
 int index = getIndex( key );
@@ -154,36 +158,23 @@ lineArray[index].getValue( key, toGet );
 
 
 
-/*
+internal bool keyExists( string url )
+{
+if( url == null )
+  return false;
 
-  public boolean keyExists( StrA key )
-    {
-    if( key == null )
-      return false;
+url = Str.trim( url );
+url = Str.toLower( url );
+if( url.Length < 1 )
+  return false;
 
-    key = key.trim().toLowerCase();
-    if( key.length() < 1 )
-      return false;
+int index = getIndex( url );
+if( lineArray[index] == null )
+  return false;
 
-    int index = getIndex( key );
-    if( lineArray[index] == null )
-      return false;
+return lineArray[index].keyExists( url );
+}
 
-    return lineArray[index].keyExists( key );
-    }
-
-
-
-  public void saveToFile()
-    {
-    StrA fileS = makeKeysValuesStrA();
-    FileUtility.writeStrAToFile( mApp,
-                                 fileName,
-                                 fileS,
-                                 false,
-                                 true );
-    }
-*/
 
 
 
@@ -208,8 +199,6 @@ string fileS = SysIO.readAllText( fileName );
 StrAr lines = new StrAr();
 lines.split( fileS, MarkersAI.StoryListDelim );
 int last = lines.getLast();
-
-mData.showStatus( "Stories: " + last );
 
 for( int count = 0; count < last; count++ )
   {
@@ -417,6 +406,97 @@ writeFileS( toWrite );
 
 mData.showStatus( "Stories: " + howMany );
 mData.showStatus( "Finished writing file." );
+}
+
+
+
+
+internal void storySearch( string toFindUrl,
+                          string toFind,
+                          double daysBack )
+{
+toFindUrl = Str.toLower( toFindUrl );
+toFind = Str.toLower( toFind );
+
+TimeEC timeEC = new TimeEC();
+TimeEC oldTime = new TimeEC();
+oldTime.setToNow();
+oldTime.addDays( daysBack );
+// addHours()
+ulong oldIndex = oldTime.getIndex();
+
+mData.showStatus( "oldIndex: " + oldIndex );
+
+Story story = new Story( mData );
+for( int count = 0; count < keySize; count++ )
+  {
+  if( (count % 20) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  // if( howMany > 20 )
+    // break;
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  // mData.showStatus( "Last: " + last );
+  for( int countR = 0; countR < last; countR++ )
+    {
+    lineArray[count].getCopyStoryAt( story,
+                                     countR );
+
+    ulong linkDateIndex = story.getDateIndex();
+
+===== What's with this date?
+
+    if( linkDateIndex < oldIndex )
+      continue;
+
+    string url = story.getUrl();
+    url = Str.toLower( url );
+    if( !Str.contains( url, toFindUrl ))
+      continue;
+
+    string linkText = story.getLinkText();
+    string linkTextLower =
+                      Str.toLower( linkText );
+
+    if( !Str.contains( linkTextLower, toFind ))
+      continue;
+
+    // mData.showStatus( linkText );
+    story.showStory();
+
+
+/*
+    HtmlFile htmlFile = new HtmlFile( mData,
+                                urlFrom,
+                                fullPath,
+                                linkDateIndex,
+                                linkText );
+
+    htmlFile.readFileS();
+    htmlFile.markupSections();
+    // htmlFile.processNewAnchorTags();
+
+
+    Story story = new Story( mData, urlFrom,
+                  linkDateIndex, linkText );
+
+    if( htmlFile.makeStory( story ))
+      {
+      storyDct.setValue( story.getUrl(), story );
+      story.showStory();
+      }
+*/
+    // howMany++;
+    }
+  }
 }
 
 
