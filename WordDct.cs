@@ -17,30 +17,30 @@ using System;
 
 
 
-public class StoryDct
+public class WordDct
 {
 private MainData mData;
-private StoryDctLine[] lineArray;
+private WordDctLine[] lineArray;
 private const int keySize = 0xFFF;
 private ByteBuf resultHash;
 private ByteBuf message;
 
 
-private StoryDct()
+private WordDct()
 {
 }
 
 
 
-internal StoryDct( MainData useMainData )
+internal WordDct( MainData useMainData )
 {
 mData = useMainData;
 
 try
 {
-lineArray = new StoryDctLine[keySize];
+lineArray = new WordDctLine[keySize];
 for( int count = 0; count < keySize; count++ )
-  lineArray[count] = new StoryDctLine( mData );
+  lineArray[count] = new WordDctLine( mData );
 
 resultHash = new ByteBuf();
 message = new ByteBuf();
@@ -50,7 +50,7 @@ catch( Exception Except )
   {
   freeAll();
   mData.showStatus(
-     "Not enough memory for StoryDctLines." );
+     "Not enough memory for WordDct." );
   mData.showStatus( Except.Message );
   // return;
   }
@@ -73,7 +73,7 @@ for( int count = 0; count < keySize; count++ )
 }
 
 
-
+/*
 internal int getIndex( string url )
 {
 url = Str.trim( url );
@@ -95,7 +95,9 @@ index = index & keySize;
 if( index == keySize )
   index = keySize - 1;
 
-/*
+
+
+///////////
 make this distribution thing work right...
   {
   // Distribute those last two at keySize
@@ -105,13 +107,15 @@ make this distribution thing work right...
   byte lastByte = message.getU8( lastB - 1 );
   index = index - lastByte;
   }
-*/
+///////////
 
 return index;
 }
+*/
 
 
 
+/*
 internal void setValue( string key,
                         Story value )
 {
@@ -220,119 +224,12 @@ for( int count = 0; count < last; count++ )
   lineArray[index].setValue( story );
   }
 }
+*/
 
 
 
 
 /*
-internal void htmlSearch( string toFindUrl,
-                          string toFind,
-                          double daysBack )
-{
-// mData.showStatus( "Doing HTML search." );
-
-int howMany = 0;
-
-URLFile urlFile = new URLFile( mData );
-TimeEC timeEC = new TimeEC();
-TimeEC oldTime = new TimeEC();
-oldTime.setToNow();
-oldTime.addDays( daysBack );
-// addHours()
-ulong oldIndex = oldTime.getIndex();
-
-int paraCount = 0;
-for( int count = 0; count < keySize; count++ )
-  {
-  if( (count % 20) == 0 )
-    {
-    if( !mData.checkEvents())
-      return;
-
-    }
-
-  if( howMany > 20 )
-    break;
-
-  int last = lineArray[count].getArrayLast();
-  if( last < 1 )
-    continue;
-
-  // mData.showStatus( "Last: " + last );
-  for( int countR = 0; countR < last; countR++ )
-    {
-    lineArray[count].getCopyURLFileAt(
-                                    urlFile,
-                                    countR );
-
-    ulong linkDateIndex = urlFile.getDateIndex();
-
-    if( linkDateIndex < oldIndex )
-      continue;
-
-    // if( urlFile.getYear() < 2024 )
-      // continue;
-
-    string url = urlFile.getUrl();
-    string urlFrom = url;
-    url = Str.toLower( url );
-
-    if( !Str.contains( url, toFindUrl ))
-      continue;
-
-
-    string linkText = urlFile.getLinkText();
-
-    string fileName = urlFile.getFileName();
-    string fullPath = mData.
-                    getOldDataDirectory() +
-                    "URLFiles\\" + fileName;
-
-    if( !SysIO.fileExists( fullPath ))
-      continue;
-
-    HtmlFile htmlFile = new HtmlFile( mData,
-                                urlFrom,
-                                fullPath,
-                                linkDateIndex,
-                                linkText );
-
-    htmlFile.readFileS();
-    htmlFile.markupSections();
-    // htmlFile.processNewAnchorTags();
-
-    Story story = new Story( mData, urlFrom,
-                  linkDateIndex, linkText );
-
-
-    int paraCountOne = htmlFile.makeStory( story,
-                                     toFind );
-
-
-    paraCount += paraCountOne;
-
-    story.showStory();
-
-    // if( paraCountOne > 0 )
-      // {
-      // mData.showStatus( "linkDate: " + linkDate );
-      // mData.showStatus( "urlFrom: " + urlFrom );
-      // mData.showStatus( " " );
-      // }
-
-    howMany++;
-
-    // return;
-    }
-  }
-
-mData.showStatus( "\r\nParagraph count: " +
-                                 paraCount );
-}
-*/
-
-
-
 internal void writeFileS( string toWrite )
 {
 string fileName = mData.getStoriesFileName();
@@ -471,7 +368,9 @@ for( int count = 0; count < keySize; count++ )
     story.showStory();
 
 
-/*
+
+
+/////////////
     HtmlFile htmlFile = new HtmlFile( mData,
                                 urlFrom,
                                 fullPath,
@@ -491,11 +390,14 @@ for( int count = 0; count < keySize; count++ )
       storyDct.setValue( story.getUrl(), story );
       story.showStory();
       }
-*/
+////////////////
+
+
     // howMany++;
     }
   }
 }
+*/
 
 
 
