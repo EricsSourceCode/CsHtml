@@ -21,9 +21,12 @@ public class WordDct
 {
 private MainData mData;
 private WordDctLine[] lineArray;
-private const int keySize = 0xFFF;
-private ByteBuf resultHash;
-private ByteBuf message;
+
+// Two 7 bit ascii values.
+private const int keySize = 0x3FFF;
+
+// private ByteBuf resultHash;
+// private ByteBuf message;
 
 
 private WordDct()
@@ -42,8 +45,8 @@ lineArray = new WordDctLine[keySize];
 for( int count = 0; count < keySize; count++ )
   lineArray[count] = new WordDctLine( mData );
 
-resultHash = new ByteBuf();
-message = new ByteBuf();
+// resultHash = new ByteBuf();
+// message = new ByteBuf();
 
 }
 catch( Exception Except )
@@ -73,45 +76,42 @@ for( int count = 0; count < keySize; count++ )
 }
 
 
-/*
-internal int getIndex( string url )
-{
-url = Str.trim( url );
-url = Str.toLower( url );
 
-if( url.Length == 0 )
+internal int getIndex( string wordIn )
+{
+wordIn = Str.trim( wordIn );
+wordIn = Str.toLower( wordIn );
+
+int len = wordIn.Length;
+if( len == 0 )
   return 0;
 
-message.setFromAsciiStr( url );
-mData.sha256.makeHash( resultHash, message );
-// string showS = resultHash.getHexStr();
-// mData.showStatus( showS );
+char char1 = wordIn[0];
+char char2 = 'a';
+char char3 = 'a';
 
-int index = resultHash.getU8( 0 );
-index <<= 8;
-index |= resultHash.getU8( 1 );
+// Little 'a' is 97.
+
+if( len >= 2 )
+  char2 = wordIn[1];
+
+if( len >= 3 )
+  char3 = wordIn[2];
+
+// Little 'a' is 97.
+if( char1 < 'a' )
+  char1 = 'a';
+
+int index = 0;
+
 
 index = index & keySize;
 if( index == keySize )
   index = keySize - 1;
 
-
-
-///////////
-make this distribution thing work right...
-  {
-  // Distribute those last two at keySize
-  // and keySize - 1 more evenly.
-  // index = keySize - 1;
-  int lastB = message.getLast();
-  byte lastByte = message.getU8( lastB - 1 );
-  index = index - lastByte;
-  }
-///////////
-
 return index;
 }
-*/
+
 
 
 
@@ -186,9 +186,9 @@ internal void readAllFromFile()
 {
 clear();
 
-string fileName = mData.getStoriesFileName();
+string fileName = mData.getWordsFileName();
 
-mData.showStatus( "Reading file:" );
+mData.showStatus( "Reading words file:" );
 mData.showStatus( fileName );
 
 if( !SysIO.directoryExists(

@@ -196,4 +196,3 @@ story.copy( valueArray[where] );
 
 
 } // Class
-

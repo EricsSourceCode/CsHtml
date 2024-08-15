@@ -21,7 +21,7 @@ using System;
 public class Word
 {
 private MainData mData;
-private string wordS = "";
+private string word = "";
 private int index = -1;
 private int count = 0;
 
@@ -40,24 +40,28 @@ mData = mDataToUse;
 
 
 
-/*
+
 internal bool setFromString( string inS )
 {
+clear();
+
 StrAr parts = new StrAr();
-parts.split( inS, MarkersAI.StoryDelim );
+parts.split( inS, MarkersAI.WordDelim );
 int last = parts.getLast();
 
-if( last < 4 )
+if( last < 3 )
   {
-  // mData.showStatus(
-  //         "Story: Not enough fields." );
+  mData.showStatus(
+           "Word: Not enough fields." );
   return false;
   }
 
-urlFrom = parts.getStrAt( 0 );
-linkDate.setFromDelim( parts.getStrAt( 1 ));
-linkText = parts.getStrAt( 2 );
-parags = parts.getStrAt( 3 );
+word = parts.getStrAt( 0 );
+index = MathF.strToInt( parts.getStrAt( 1 ),
+                        0 );
+count = MathF.strToInt( parts.getStrAt( 2 ),
+                        0 );
+
 return true;
 }
 
@@ -65,28 +69,35 @@ return true;
 
 internal string toString()
 {
-string result = urlFrom +
-                MarkersAI.StoryDelim +
-                linkDate.toDelimStr() +
-                MarkersAI.StoryDelim +
-                linkText +
-                MarkersAI.StoryDelim +
-                parags +
-                MarkersAI.StoryDelim;
+string result = word +
+                MarkersAI.WordDelim +
+                index +
+                MarkersAI.WordDelim +
+                count +
+                MarkersAI.WordDelim;
 
 return result;
 }
 
 
 
-internal void copy( Story toCopy )
+
+internal void copy( Word toCopy )
 {
-linkDate.copy( toCopy.linkDate );
-urlFrom = toCopy.urlFrom;
-linkText = toCopy.linkText;
-parags = toCopy.parags;
+word = toCopy.word;
+index = toCopy.index;
+count = toCopy.count;
 }
-*/
+
+
+
+internal void clear()
+{
+word = "";
+index = 0;
+count = 0;
+}
+
 
 
 
