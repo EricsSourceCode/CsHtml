@@ -41,7 +41,7 @@ valueArray = new Word[1];
 
 // An array of structs would get initialized,
 // but not an array of objects.
-valueArray[0] = new Word( mData );
+valueArray[0] = new Word( mData, "" );
 }
 catch( Exception Except )
   {
@@ -92,7 +92,7 @@ if( newSize > oldSize )
     // An array of structs would get initialized,
     // but not an array of objects.
     valueArray[count] = new
-                     Word( mData );
+                     Word( mData, "" );
     }
   }
 }
@@ -107,8 +107,7 @@ catch( Exception ) // Except )
 
 
 
-/*
-private int getIndexOfUrl( string url )
+private int getIndexOfWord( string word )
 {
 if( arrayLast < 1 )
   return -1;
@@ -116,7 +115,7 @@ if( arrayLast < 1 )
 int max = arrayLast;
 for( int count = 0; count < max; count++ )
   {
-  if( valueArray[count].urlIsEqual( url ))
+  if( valueArray[count].getWord() == word )
     return count;
 
   }
@@ -126,9 +125,9 @@ return -1;
 
 
 
-internal bool keyExists( string url )
+internal bool keyExists( string word )
 {
-if( getIndexOfUrl( url ) < 0 )
+if( getIndexOfWord( word ) < 0 )
   return false;
 
 return true;
@@ -137,14 +136,14 @@ return true;
 
 
 
-internal void setValue( Story value )
+internal void setValue( Word value )
 {
-// This sets the Story to the new value
+// This sets the Word to the new value
 // whether it's already there or not.
 
-string url = value.getUrl();
+string word = value.getWord();
 
-int index = getIndexOfUrl( url );
+int index = getIndexOfWord( word );
 if( index >= 0 )
   {
   valueArray[index].copy( value );
@@ -163,24 +162,24 @@ else
 
 
 
-internal void getValue( string url,
-                        Story story )
+internal void getValue( string word,
+                        Word toGet )
 {
-story.clear();
-int index = getIndexOfUrl( url );
+toGet.clear();
+int index = getIndexOfWord( word );
 if( index < 0 )
   return;
 
-story.copy( valueArray[index] );
+toGet.copy( valueArray[index] );
 }
 
 
 
 
-internal void getCopyStoryAt( Story story,
-                              int where )
+internal void getCopyWordAt( Word toGet,
+                             int where )
 {
-story.clear();
+toGet.clear();
 
 if( where < 0 )
   return;
@@ -188,9 +187,9 @@ if( where < 0 )
 if( where >= arrayLast )
   return;
 
-story.copy( valueArray[where] );
+toGet.copy( valueArray[where] );
 }
-*/
+
 
 
 

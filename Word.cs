@@ -33,11 +33,19 @@ private Word()
 
 
 
-internal Word( MainData mDataToUse )
+internal Word( MainData mDataToUse,
+               string wordS )
 {
 mData = mDataToUse;
+word = wordS;
 }
 
+
+
+internal string getWord()
+{
+return word;
+}
 
 
 
@@ -98,6 +106,12 @@ index = 0;
 count = 0;
 }
 
+
+
+internal void setIndex( int setTo )
+{
+index = setTo;
+}
 
 
 

@@ -188,4 +188,21 @@ return linkText;
 
 
 
+internal string getWordsLine()
+{
+string result = Str.replace( parags,
+               "" + MarkersAI.StoryParagDelim,
+               " " );
+
+result = Str.replace( result,
+                      "|",
+                      " " );
+
+result = Str.toLower( result );
+result = Str.trim( result );
+return result;
+}
+
+
+
 } // Class

@@ -413,7 +413,8 @@ mData.showStatus( "Finished writing file." );
 
 internal void storySearch( string toFindUrl,
                           string toFind,
-                          double daysBack )
+                          double daysBack,
+                          WordDct wordDct )
 {
 toFindUrl = Str.toLower( toFindUrl );
 toFind = Str.toLower( toFind );
@@ -427,6 +428,8 @@ ulong oldIndex = oldTime.getIndex();
 
 // mData.showStatus( "oldIndex: " + oldIndex );
 
+int howMany = 0;
+
 Story story = new Story( mData );
 for( int count = 0; count < keySize; count++ )
   {
@@ -437,8 +440,9 @@ for( int count = 0; count < keySize; count++ )
 
     }
 
-  // if( howMany > 20 )
-    // break;
+  howMany++;
+  if( howMany > 50000000 )
+    break;
 
   int last = lineArray[count].getArrayLast();
   if( last < 1 )
@@ -467,8 +471,11 @@ for( int count = 0; count < keySize; count++ )
     if( !Str.contains( linkTextLower, toFind ))
       continue;
 
+    string wordsLine = story.getWordsLine();
+    wordDct.addWordsLine( wordsLine );
+
     // mData.showStatus( linkText );
-    story.showStory();
+    // story.showStory();
 
 
 /*
