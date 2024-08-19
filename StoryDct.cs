@@ -194,6 +194,12 @@ if( !SysIO.directoryExists(
   return;
   }
 
+if( !SysIO.fileExists( fileName ))
+  {
+  mData.showStatus( "No stories file." );
+  return;
+  }
+
 string fileS = SysIO.readAllText( fileName );
 
 StrAr lines = new StrAr();
@@ -476,30 +482,6 @@ for( int count = 0; count < keySize; count++ )
 
     // mData.showStatus( linkText );
     // story.showStory();
-
-
-/*
-    HtmlFile htmlFile = new HtmlFile( mData,
-                                urlFrom,
-                                fullPath,
-                                linkDateIndex,
-                                linkText );
-
-    htmlFile.readFileS();
-    htmlFile.markupSections();
-    // htmlFile.processNewAnchorTags();
-
-
-    Story story = new Story( mData, urlFrom,
-                  linkDateIndex, linkText );
-
-    if( htmlFile.makeStory( story ))
-      {
-      storyDct.setValue( story.getUrl(), story );
-      story.showStory();
-      }
-*/
-    // howMany++;
     }
   }
 }

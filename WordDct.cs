@@ -141,7 +141,7 @@ if( index > 0x7FFF )
 
 index = index & keySize;
 if( index == keySize )
-  index = keySize - 1;
+  throw new Exception( "index > keySize." );
 
 return index;
 }
@@ -229,6 +229,12 @@ if( !SysIO.directoryExists(
   return;
   }
 
+if( !SysIO.fileExists( fileName ))
+  {
+  mData.showStatus( "No words file." );
+  return;
+  }
+
 string fileS = SysIO.readAllText( fileName );
 
 StrAr lines = new StrAr();
@@ -247,10 +253,10 @@ for( int count = 0; count < last; count++ )
   string wordS = word.getWord();
   int index = getIndex( wordS );
 
-  mData.showStatus( "word: " + wordS );
-  mData.showStatus( "index: " + index );
-  if( count > 50 )
-    break;
+  // mData.showStatus( "word: " + wordS );
+  // mData.showStatus( "index: " + index );
+  // if( count > 50 )
+    // break;
 
   lineArray[index].setValue( word );
   }
@@ -332,10 +338,6 @@ mData.showStatus( "Finished writing file." );
 
 internal void addWordsLine( string line )
 {
-// mData.showStatus( " " );
-// mData.showStatus( "addWordsLine()" );
-// mData.showStatus( line );
-
 if( line == null )
   return;
 
@@ -357,14 +359,13 @@ for( int count = 0; count < last; count++ )
   if( word.Length < 1 )
     continue;
 
-  // if( isBadWord( word ))
-    // continue;
-
+  if( isBadWord( word ))
+    continue;
 
   if( keyExists( word ))
     continue;
 
-  addNewWord( word );
+  addWord( word );
   }
 }
 
@@ -374,6 +375,13 @@ for( int count = 0; count < last; count++ )
 internal string removePunctuation( string word )
 {
 string result = "";
+
+if( Str.endsWith( word, "\'" ))
+  word = Str.replace( word, "\'", "" );
+
+if( Str.startsWith( word, "\'" ))
+  word = Str.replace( word, "\'", "" );
+
 int last = word.Length;
 for( int count = 0; count < last; count++ )
   {
@@ -440,30 +448,33 @@ return result;
 
 
 
-// internal bool isBadWord( string word )
-// {
-// return false;
-// }
-
-
-
-private void addNewWord( string wordS )
+internal bool isBadWord( string word )
 {
+// An email address:
+if( Str.contains( word, "@" ))
+  return true;
+
+return false;
+}
+
+
+
+
+private void addWord( string wordS )
+{
+if( keyExists( wordS ))
+  return;
+
 mData.showStatus( "New word: " + wordS );
 
-  // setValue( Word value )
-
-====
-highestIndex should be renamed... what?
-It is one more than the highest index in
-the data?
-
 Word toAdd = new Word( mData, wordS );
-toAdd.setIndex( highestIndex );
+
+// It is at the highest index it found,
+// so add one to make a new higher index
+// than what is in the data.
 highestIndex++;
-
+toAdd.setIndex( highestIndex );
 // toAdd.count = 0;
-
 setValue( toAdd );
 }
 

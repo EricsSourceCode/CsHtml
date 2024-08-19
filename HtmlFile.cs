@@ -264,10 +264,19 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "</span>", "" );
   para = Str.replace( para, "<em>", "" );
   para = Str.replace( para, "</em>", "" );
+  para = Str.replace( para, "<i>", "" );
+  para = Str.replace( para, "</i>", "" );
+
+
+  para = Str.replace( para, "<b>", "" );
+  para = Str.replace( para, "</b>", "" );
+
   para = Str.replace( para, " ,", "," );
   para = Str.replace( para, "\r", " " );
   para = Str.replace( para, "\n", " " );
   para = Str.replace( para, "\t", " " );
+
+  para = Str.replace( para, "/", " " );
 
   para = Ampersand.fixChars( para );
 
