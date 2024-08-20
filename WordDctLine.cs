@@ -22,6 +22,7 @@ public class WordDctLine
 private MainData mData;
 private Word[] valueArray;
 private int arrayLast = 0;
+private int[] sortIndexAr;
 
 
 
@@ -38,6 +39,8 @@ mData = useMainData;
 try
 {
 valueArray = new Word[1];
+sortIndexAr = new int[1];
+sortIndexAr[0] = 0;
 
 // An array of structs would get initialized,
 // but not an array of objects.
@@ -83,6 +86,10 @@ int oldSize = valueArray.Length;
 try
 {
 Array.Resize( ref valueArray, newSize );
+Array.Resize( ref sortIndexAr, newSize );
+
+for( int count = 0; count < newSize; count++ )
+  sortIndexAr[count] = count;
 
 if( newSize > oldSize )
   {
@@ -107,7 +114,7 @@ catch( Exception ) // Except )
 
 
 
-private int getIndexOfWord( string word )
+private int getPositionOfWord( string word )
 {
 if( arrayLast < 1 )
   return -1;
@@ -127,7 +134,7 @@ return -1;
 
 internal bool keyExists( string word )
 {
-if( getIndexOfWord( word ) < 0 )
+if( getPositionOfWord( word ) < 0 )
   return false;
 
 return true;
@@ -143,10 +150,10 @@ internal void setValue( Word value )
 
 string word = value.getWord();
 
-int index = getIndexOfWord( word );
-if( index >= 0 )
+int pos = getPositionOfWord( word );
+if( pos >= 0 )
   {
-  valueArray[index].copy( value );
+  valueArray[pos].copy( value );
   }
 else
   {
@@ -166,11 +173,11 @@ internal void getValue( string word,
                         Word toGet )
 {
 toGet.clear();
-int index = getIndexOfWord( word );
-if( index < 0 )
+int pos = getPositionOfWord( word );
+if( pos < 0 )
   return;
 
-toGet.copy( valueArray[index] );
+toGet.copy( valueArray[pos] );
 }
 
 
@@ -190,6 +197,54 @@ if( where >= arrayLast )
 toGet.copy( valueArray[where] );
 }
 
+
+
+internal void sortByWord()
+{
+while( true )
+  {
+  bool swapped = false;
+
+  for( int count = 0; count < (arrayLast - 1);
+                                    count++ )
+    {
+    if( 0 < String.Compare( 
+          valueArray[sortIndexAr[count]].
+                                  getWord(),
+          valueArray[sortIndexAr[count + 1]].
+                                  getWord(),
+                                  true ))
+      {
+      int tempIndex = sortIndexAr[count];
+      sortIndexAr[count] =
+                       sortIndexAr[count + 1];
+      sortIndexAr[count + 1] = tempIndex;
+      swapped = true;
+      }
+    }
+
+  if( !swapped )
+    break;
+
+  }
+}
+
+
+
+internal void getCopySortedWordAt( Word toGet,
+                                   int where )
+{
+toGet.clear();
+
+if( where < 0 )
+  return;
+
+if( where >= arrayLast )
+  return;
+
+toGet.copy( valueArray[sortIndexAr[where]] );
+}
+    
 
 
 

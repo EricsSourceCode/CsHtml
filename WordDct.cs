@@ -73,7 +73,7 @@ for( int count = 0; count < keySize; count++ )
 
 
 
-internal int getIndex( string wordIn )
+internal int getArIndex( string wordIn )
 {
 wordIn = Str.trim( wordIn );
 wordIn = Str.toLower( wordIn );
@@ -161,9 +161,9 @@ if( word == null )
 if( word.Length < 1 )
   return;
 
-int index = getIndex( word );
+int arIndex = getArIndex( word );
 
-lineArray[index].setValue( value );
+lineArray[arIndex].setValue( value );
 }
 catch( Exception )
   {
@@ -185,11 +185,11 @@ if( word == null )
 if( word.Length < 1 )
   return;
 
-int index = getIndex( word );
-if( lineArray[index].getArrayLast() == 0 )
+int arIndex = getArIndex( word );
+if( lineArray[arIndex].getArrayLast() == 0 )
   return;
 
-lineArray[index].getValue( word, toGet );
+lineArray[arIndex].getValue( word, toGet );
 }
 
 
@@ -203,11 +203,11 @@ word = Str.trim( word );
 if( word.Length < 1 )
   return false;
 
-int index = getIndex( word );
-if( lineArray[index] == null )
+int arIndex = getArIndex( word );
+if( lineArray[arIndex] == null )
   return false;
 
-return lineArray[index].keyExists( word );
+return lineArray[arIndex].keyExists( word );
 }
 
 
@@ -251,7 +251,9 @@ for( int count = 0; count < last; count++ )
     continue;
 
   string wordS = word.getWord();
-  int index = getIndex( wordS );
+  int index = word.getIndex();
+  if( highestIndex < index )
+    highestIndex = index;
 
   // mData.showStatus( "word: " + wordS );
   // mData.showStatus( "index: " + index );
@@ -314,6 +316,13 @@ for( int count = 0; count < keySize; count++ )
     {
     lineArray[count].getCopyWordAt( word,
                                     countR );
+
+    // It doesn't have a valid index.
+    if( word.getIndex() < 1 )
+      {
+      throw new Exception(
+                "Word valid index on write." );
+      }
 
     // ulong dateIndex = story.getDateIndex();
     // if( dateIndex < oldIndex )

@@ -59,8 +59,8 @@ int last = parts.getLast();
 
 if( last < 3 )
   {
-  mData.showStatus(
-           "Word: Not enough fields." );
+  // mData.showStatus(
+  //         "Word: Not enough fields." );
   return false;
   }
 
@@ -112,6 +112,14 @@ internal void setIndex( int setTo )
 {
 index = setTo;
 }
+
+
+
+internal int getIndex()
+{
+return index;
+}
+
 
 
 

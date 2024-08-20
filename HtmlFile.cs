@@ -267,7 +267,6 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "<i>", "" );
   para = Str.replace( para, "</i>", "" );
 
-
   para = Str.replace( para, "<b>", "" );
   para = Str.replace( para, "</b>", "" );
 
