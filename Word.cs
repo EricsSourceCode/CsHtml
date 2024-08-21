@@ -22,7 +22,9 @@ public class Word
 {
 private MainData mData;
 private string word = "";
-private int index = -1;
+// The idNum gets multiplied by a weight,
+// so it has to be >= 1 to be valid.
+private int idNum = 0;
 private int count = 0;
 
 
@@ -65,7 +67,7 @@ if( last < 3 )
   }
 
 word = parts.getStrAt( 0 );
-index = MathF.strToInt( parts.getStrAt( 1 ),
+idNum = MathF.strToInt( parts.getStrAt( 1 ),
                         0 );
 count = MathF.strToInt( parts.getStrAt( 2 ),
                         0 );
@@ -79,7 +81,7 @@ internal string toString()
 {
 string result = word +
                 MarkersAI.WordDelim +
-                index +
+                idNum +
                 MarkersAI.WordDelim +
                 count +
                 MarkersAI.WordDelim;
@@ -93,7 +95,7 @@ return result;
 internal void copy( Word toCopy )
 {
 word = toCopy.word;
-index = toCopy.index;
+idNum = toCopy.idNum;
 count = toCopy.count;
 }
 
@@ -102,22 +104,22 @@ count = toCopy.count;
 internal void clear()
 {
 word = "";
-index = 0;
+idNum = 0;
 count = 0;
 }
 
 
 
-internal void setIndex( int setTo )
+internal void setIdNum( int setTo )
 {
-index = setTo;
+idNum = setTo;
 }
 
 
 
-internal int getIndex()
+internal int getIdNum()
 {
-return index;
+return idNum;
 }
 
 

@@ -21,10 +21,11 @@ public class WordDct
 {
 private MainData mData;
 private WordDctLine[] lineArray;
-int highestIndex = 0;
+int highestIdNum = 0;
+int minArIndex = 0;
 
-// Two 7 bit ascii values.
-private const int keySize = 0x7FFF;
+
+private const int keySize = 0x3FF;
 
 
 
@@ -37,6 +38,8 @@ private WordDct()
 internal WordDct( MainData useMainData )
 {
 mData = useMainData;
+
+minArIndex = getArIndex( "aa" );
 
 try
 {
@@ -83,27 +86,18 @@ if( len == 0 )
   return 0;
 
 char char1 = wordIn[0];
-char char2 = 'a';
-char char3 = 'a';
-
-// Little 'a' is 97.
+char char2 = (char)96;  // Little 'a' is 97.
 
 if( len >= 2 )
   char2 = wordIn[1];
 
-if( len >= 3 )
-  char3 = wordIn[2];
-
 // Little 'a' is 97.
 
 if( char1 < 'a' )
-  char1 = 'a';
+  char1 = (char)96;
 
 if( char2 < 'a' )
-  char2 = 'a';
-
-if( char3 < 'a' )
-  char3 = 'a';
+  char2 = (char)96;
 
 if( char1 > 'z' )
   char1 = 'z';
@@ -111,37 +105,46 @@ if( char1 > 'z' )
 if( char2 > 'z' )
   char2 = 'z';
 
-if( char3 > 'z' )
-  char3 = 'z';
+// 'a' - 96 is 1.  So there can be a zero.
+int index1 = char1 - 96;
+int index2 = char2 - 96;
 
-int index1 = char1 - 'a';
-int index2 = char2 - 'a';
-int index3 = char3 - 'a';
-
-if( index1 > 26 )
+if( index1 > 27 )
   {
   throw new Exception(
          "This can't happen in WordDct." );
   }
 
+if( index1 < 0 )
+  {
+  throw new Exception(
+         "index1 < 0." );
+  }
+
+if( index2 < 0 )
+  {
+  throw new Exception(
+         "index2 < 0." );
+  }
+
 // 5 bits.
-int mask = 16 + 8 + 4 + 2 + 1;
-if( mask != 0x1F )
-  throw new Exception( "Mask is not right." );
+// int mask = 16 + 8 + 4 + 2 + 1;
+// if( mask != 0x1F )
+//  throw new Exception( "Mask is not right." );
 
 int index = index1;
 index <<= 5;
 index |= index2;
-index <<= 5;
-index |= index3;
 
-// 15 bits.
-if( index > 0x7FFF )
+if( index < 0 )
+  throw new Exception( "index < 0" );
+
+if( index >= keySize )
   throw new Exception( "index is too big." );
 
-index = index & keySize;
-if( index == keySize )
-  throw new Exception( "index > keySize." );
+// index = index & keySize;
+// if( index == keySize )
+//  throw new Exception( "index == keySize." );
 
 return index;
 }
@@ -251,16 +254,17 @@ for( int count = 0; count < last; count++ )
     continue;
 
   string wordS = word.getWord();
-  int index = word.getIndex();
-  if( highestIndex < index )
-    highestIndex = index;
+  int idNum = word.getIdNum();
+  if( highestIdNum < idNum )
+    highestIdNum = idNum;
 
-  // mData.showStatus( "word: " + wordS );
-  // mData.showStatus( "index: " + index );
   // if( count > 50 )
     // break;
 
-  lineArray[index].setValue( word );
+  int arIndex = getArIndex( word.getWord());
+  if( arIndex >= minArIndex )
+    lineArray[arIndex].setValue( word );
+
   }
 }
 
@@ -317,8 +321,8 @@ for( int count = 0; count < keySize; count++ )
     lineArray[count].getCopyWordAt( word,
                                     countR );
 
-    // It doesn't have a valid index.
-    if( word.getIndex() < 1 )
+    // It doesn't have a valid idNum.
+    if( word.getIdNum() < 1 )
       {
       throw new Exception(
                 "Word valid index on write." );
@@ -388,8 +392,8 @@ string result = "";
 if( Str.endsWith( word, "\'" ))
   word = Str.replace( word, "\'", "" );
 
-if( Str.startsWith( word, "\'" ))
-  word = Str.replace( word, "\'", "" );
+// if( Str.startsWith( word, "\'" ))
+  // word = Str.replace( word, "\'", "" );
 
 int last = word.Length;
 for( int count = 0; count < last; count++ )
@@ -418,6 +422,19 @@ for( int count = 0; count < last; count++ )
 
   if( letter == ')' )
     continue;
+
+  if( letter == '[' )
+    continue;
+
+  if( letter == ']' )
+    continue;
+
+  if( letter == '{' )
+    continue;
+
+  if( letter == '}' )
+    continue;
+
 
   if( letter == '$' )
     continue;
@@ -474,17 +491,101 @@ private void addWord( string wordS )
 if( keyExists( wordS ))
   return;
 
+if( getArIndex( wordS ) < minArIndex )
+  return;
+
+
 mData.showStatus( "New word: " + wordS );
 
 Word toAdd = new Word( mData, wordS );
 
-// It is at the highest index it found,
-// so add one to make a new higher index
+// It is at the highest idNum it found,
+// so add one to make a new higher idNum
 // than what is in the data.
-highestIndex++;
-toAdd.setIndex( highestIndex );
+highestIdNum++;
+toAdd.setIdNum( highestIdNum );
 // toAdd.count = 0;
 setValue( toAdd );
+}
+
+
+
+
+internal void sortWords()
+{
+mData.showStatus( "Sorting words." );
+
+for( int count = 0; count < keySize; count++ )
+  {
+  if( (count % 100) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  lineArray[count].sortByWord();
+  }
+
+mData.showStatus( "Finished sorting words." );
+}
+
+
+
+
+internal void showSortedWords()
+{
+sortWords();
+mData.showStatus( " " );
+mData.showStatus( " " );
+
+SBuilder sBuild = new SBuilder();
+
+Word word = new Word( mData, "" );
+
+int howMany = 0;
+for( int count = 0; count < keySize; count++ )
+  {
+  mData.showStatus( " " );
+  mData.showStatus( "Count: " + count );
+  mData.showStatus( " " );
+
+  if( (count % 20) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  // if( howMany > 20 )
+    // break;
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  // mData.showStatus( "Last: " + last );
+  for( int countR = 0; countR < last; countR++ )
+    {
+    lineArray[count].getCopySortedWordAt(
+                               word, countR );
+
+    // ulong dateIndex = story.getDateIndex();
+    // if( dateIndex < oldIndex )
+      // continue;
+
+    mData.showStatus( word.getWord() +
+                      ": " + word.getIdNum());
+    howMany++;
+    }
+  }
+
+mData.showStatus( " " );
+mData.showStatus( "Words: " + howMany );
 }
 
 

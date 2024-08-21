@@ -201,6 +201,9 @@ toGet.copy( valueArray[where] );
 
 internal void sortByWord()
 {
+if( arrayLast < 2 )
+  return;
+
 while( true )
   {
   bool swapped = false;
@@ -208,7 +211,7 @@ while( true )
   for( int count = 0; count < (arrayLast - 1);
                                     count++ )
     {
-    if( 0 < String.Compare( 
+    if( 0 < String.Compare(
           valueArray[sortIndexAr[count]].
                                   getWord(),
           valueArray[sortIndexAr[count + 1]].
@@ -244,7 +247,7 @@ if( where >= arrayLast )
 
 toGet.copy( valueArray[sortIndexAr[where]] );
 }
-    
+
 
 
 
