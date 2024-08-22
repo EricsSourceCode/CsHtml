@@ -153,7 +153,7 @@ return index;
 
 
 
-internal void setValue( Word value )
+internal void setValueAnyID( Word value )
 {
 try
 {
@@ -166,7 +166,7 @@ if( word.Length < 1 )
 
 int arIndex = getArIndex( word );
 
-lineArray[arIndex].setValue( value );
+lineArray[arIndex].setValueAnyID( value );
 }
 catch( Exception )
   {
@@ -263,7 +263,7 @@ for( int count = 0; count < last; count++ )
 
   int arIndex = getArIndex( word.getWord());
   if( arIndex >= minArIndex )
-    lineArray[arIndex].setValue( word );
+    lineArray[arIndex].setValueAnyID( word );
 
   }
 }
@@ -375,8 +375,8 @@ for( int count = 0; count < last; count++ )
   if( isBadWord( word ))
     continue;
 
-  if( keyExists( word ))
-    continue;
+  // Count duplicates.
+  // if( keyExists( word ))
 
   addWord( word );
   }
@@ -488,24 +488,103 @@ return false;
 
 private void addWord( string wordS )
 {
-if( keyExists( wordS ))
+if( wordS == null )
   return;
 
-if( getArIndex( wordS ) < minArIndex )
+wordS = Str.toLower( wordS );
+wordS = Str.trim( wordS );
+if( wordS.Length < 1 )
   return;
 
+int arIndex = getArIndex( wordS );
+if( arIndex < minArIndex )
+  return;
+
+if( lineArray[arIndex].keyExists( wordS ))
+  {
+  lineArray[arIndex].incCount( wordS );
+  return;
+  }
 
 mData.showStatus( "New word: " + wordS );
 
 Word toAdd = new Word( mData, wordS );
+toAdd.setCount( 1 );
 
 // It is at the highest idNum it found,
 // so add one to make a new higher idNum
 // than what is in the data.
 highestIdNum++;
 toAdd.setIdNum( highestIdNum );
-// toAdd.count = 0;
-setValue( toAdd );
+setValueAnyID( toAdd );
+}
+
+
+
+
+internal void checkUniqueID()
+{
+mData.showStatus( "Unique check." );
+
+Word word = new Word( mData, "" );
+Word word2 = new Word( mData, "" );
+
+for( int count = 0; count < keySize; count++ )
+  {
+  // mData.showStatus(
+  //          "Unique count: " + count );
+
+  if( (count % 20) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  for( int countR = 0; countR < last; countR++ )
+    {
+    lineArray[count].getCopyWordAt( word,
+                                    countR );
+    int idNum1 = word.getIdNum();
+    if( idNum1 < 1 )
+      throw new Exception( "idNum1 < 1" );
+
+    // Start on the next row at count.
+    // This misses any duplicates in row count.
+    for( int count2 = count + 1;
+                    count2 < keySize; count2++ )
+      {
+      int last2 = lineArray[count2].
+                               getArrayLast();
+        {
+        if( last2 < 1 )
+          continue;
+
+        for( int countR2 = 0; countR2 < last2;
+                                    countR2++ )
+          {
+          lineArray[count2].getCopyWordAt(
+                              word2, countR2 );
+          int idNum2 = word2.getIdNum();
+          if( idNum2 < 1 )
+            throw new Exception( "idNum2 < 1" );
+
+          if( idNum1 == idNum2 )
+            {
+            throw new Exception(
+                "idNum1 == idNum2 " + idNum1 );
+            }
+          }
+        }
+      }
+    }
+  }
+
+mData.showStatus( "Finished Unique check." );
 }
 
 
@@ -579,7 +658,8 @@ for( int count = 0; count < keySize; count++ )
       // continue;
 
     mData.showStatus( word.getWord() +
-                      ": " + word.getIdNum());
+                      ": " + word.getIdNum() +
+                      ": " + word.getCount());
     howMany++;
     }
   }
@@ -587,6 +667,61 @@ for( int count = 0; count < keySize; count++ )
 mData.showStatus( " " );
 mData.showStatus( "Words: " + howMany );
 }
+
+
+
+internal void showSortByCount()
+{
+mData.showStatus( " " );
+mData.showStatus( "Sorting by count." );
+
+WordDctLine sortLineArray = new WordDctLine(
+                                      mData );
+
+Word word = new Word( mData, "" );
+
+for( int count = 0; count < keySize; count++ )
+  {
+  if( (count % 20) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  // if( howMany > 20 )
+    // break;
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  // mData.showStatus( "Last: " + last );
+  for( int countR = 0; countR < last; countR++ )
+    {
+    lineArray[count].getCopyWordAt(
+                               word, countR );
+
+    if( word.getCount() >= 200 )
+      sortLineArray.setValueAnyID( word );
+
+    }
+  }
+
+sortLineArray.sortByCount();
+
+int lastS = sortLineArray.getArrayLast();
+for( int count = 0; count < lastS; count++ )
+  {
+  sortLineArray.getCopySortedWordAt(
+                             word, count );
+  mData.showStatus( word.getWord() + ": " +
+                    word.getCount());
+  }
+
+mData.showStatus( "Finished sort by count." );
+}
+
 
 
 

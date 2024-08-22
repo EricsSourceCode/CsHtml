@@ -124,5 +124,23 @@ return idNum;
 
 
 
+internal void incCount()
+{
+count++;
+}
+
+
+internal void setCount( int setTo )
+{
+count = setTo;
+}
+
+
+internal int getCount()
+{
+return count;
+}
+
+
 
 } // Class

@@ -143,7 +143,7 @@ return true;
 
 
 
-internal void setValue( Word value )
+internal void setValueAnyID( Word value )
 {
 // This sets the Word to the new value
 // whether it's already there or not.
@@ -234,6 +234,40 @@ while( true )
 
 
 
+internal void sortByCount()
+{
+if( arrayLast < 2 )
+  return;
+
+while( true )
+  {
+  bool swapped = false;
+
+  for( int count = 0; count < (arrayLast - 1);
+                                    count++ )
+    {
+    if( valueArray[sortIndexAr[count]].
+                                  getCount() <
+          valueArray[sortIndexAr[count + 1]].
+                                  getCount())
+      {
+      int tempIndex = sortIndexAr[count];
+      sortIndexAr[count] =
+                       sortIndexAr[count + 1];
+      sortIndexAr[count + 1] = tempIndex;
+      swapped = true;
+      }
+    }
+
+  if( !swapped )
+    break;
+
+  }
+}
+
+
+
+
 internal void getCopySortedWordAt( Word toGet,
                                    int where )
 {
@@ -246,6 +280,17 @@ if( where >= arrayLast )
   return;
 
 toGet.copy( valueArray[sortIndexAr[where]] );
+}
+
+
+
+internal void incCount( string word )
+{
+int pos = getPositionOfWord( word ); 
+if( pos < 0 )
+  return;
+
+valueArray[pos].incCount();
 }
 
 
