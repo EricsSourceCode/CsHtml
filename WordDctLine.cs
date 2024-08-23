@@ -286,7 +286,7 @@ toGet.copy( valueArray[sortIndexAr[where]] );
 
 internal void incCount( string word )
 {
-int pos = getPositionOfWord( word ); 
+int pos = getPositionOfWord( word );
 if( pos < 0 )
   return;
 

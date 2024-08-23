@@ -506,7 +506,7 @@ if( lineArray[arIndex].keyExists( wordS ))
   return;
   }
 
-mData.showStatus( "New word: " + wordS );
+// mData.showStatus( "New word: " + wordS );
 
 Word toAdd = new Word( mData, wordS );
 toAdd.setCount( 1 );
@@ -670,7 +670,7 @@ mData.showStatus( "Words: " + howMany );
 
 
 
-internal void showSortByCount()
+internal void showSortByCount( int minCount )
 {
 mData.showStatus( " " );
 mData.showStatus( "Sorting by count." );
@@ -702,7 +702,7 @@ for( int count = 0; count < keySize; count++ )
     lineArray[count].getCopyWordAt(
                                word, countR );
 
-    if( word.getCount() >= 200 )
+    if( word.getCount() >= minCount )
       sortLineArray.setValueAnyID( word );
 
     }
@@ -715,7 +715,9 @@ for( int count = 0; count < lastS; count++ )
   {
   sortLineArray.getCopySortedWordAt(
                              word, count );
-  mData.showStatus( word.getWord() + ": " +
+
+  mData.showStatus( "" + (count + 1) + ") " +
+                    word.getWord() + ": " +
                     word.getCount());
   }
 

@@ -420,7 +420,9 @@ mData.showStatus( "Finished writing file." );
 internal void storySearch( string toFindUrl,
                           string toFind,
                           double daysBack,
-                          WordDct wordDct )
+                          WordDct wordDct,
+                          WordDct wordDctDem,
+                          WordDct wordDctRep )
 {
 toFindUrl = Str.toLower( toFindUrl );
 toFind = Str.toLower( toFind );
@@ -433,6 +435,16 @@ oldTime.addDays( daysBack );
 ulong oldIndex = oldTime.getIndex();
 
 // mData.showStatus( "oldIndex: " + oldIndex );
+
+// False is Republican.
+bool isDemocrat = Str.contains( toFindUrl,
+                                "msnbc" );
+if( isDemocrat )
+  mData.showStatus( "Searching democrat words." );
+else
+  mData.showStatus(
+                "Searching republican words." );
+
 
 int howMany = 0;
 
@@ -479,6 +491,10 @@ for( int count = 0; count < keySize; count++ )
 
     string wordsLine = story.getWordsLine();
     wordDct.addWordsLine( wordsLine );
+    if( isDemocrat )
+      wordDctDem.addWordsLine( wordsLine );
+    else
+      wordDctRep.addWordsLine( wordsLine );
 
     // mData.showStatus( linkText );
     // story.showStory();
