@@ -506,7 +506,7 @@ if( lineArray[arIndex].keyExists( wordS ))
   return;
   }
 
-// mData.showStatus( "New word: " + wordS );
+mData.showStatus( "New word: " + wordS );
 
 Word toAdd = new Word( mData, wordS );
 toAdd.setCount( 1 );

@@ -75,6 +75,7 @@ if( !SysIO.fileExists( fileName ))
   }
 
 fileS = SysIO.readAllText( fileName );
+fileS = MarkersAI.removeAllMarkers( fileS );
 
 if( fileS.Length < 2 )
   {
@@ -82,6 +83,8 @@ if( fileS.Length < 2 )
   return;
   }
 }
+
+
 
 
 /*
@@ -266,9 +269,9 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "</em>", "" );
   para = Str.replace( para, "<i>", "" );
   para = Str.replace( para, "</i>", "" );
-
   para = Str.replace( para, "<b>", "" );
   para = Str.replace( para, "</b>", "" );
+  para = Str.replace( para, "<br>", "" );
 
   para = Str.replace( para, " ,", "," );
   para = Str.replace( para, "\r", " " );
@@ -609,12 +612,17 @@ for( int count = 0; count < max; count++ )
   char c = inS[count];
   if( c == 160 ) // non breaking space?
     c = ' ';
+  if( c == 163 ) // strange character
+    c = '#';
 
   if( c == 167 ) // strange character
     c = '#';
 
   if( c == 169 ) // Copyright
     c = '#';
+
+  if( c == 173 )
+    c = '-';
 
   if( c == 174 ) // Rights symbol
     c = '#';
@@ -637,10 +645,19 @@ for( int count = 0; count < max; count++ )
   if( c == 190 ) // 3/4 symbol
     c = '#';
 
+  if( c == 201 )
+    c = 'E';
+
+  if( c == 214 ) // O with two dots.
+    c = 'O';
+
   if( c == 224 ) // a with ' mark.
     c = 'a';
 
   if( c == 225 ) // a with ' mark.
+    c = 'a';
+
+  if( c == 226 )
     c = 'a';
 
   if( c == 231 ) // c with under mark.
@@ -657,6 +674,9 @@ for( int count = 0; count < max; count++ )
 
   if( c == 235 ) // e two dots.
     c = 'e';
+
+  if( c == 236 )
+    c = 'i';
 
   if( c == 237 ) // i with slanted dot.
     c = 'i';
@@ -682,7 +702,13 @@ for( int count = 0; count < max; count++ )
   if( c == 249 ) // u with '.
     c = 'u';
 
+  if( c == 250 ) // u with '.
+    c = 'u';
+
   if( c == 251 ) // u with hat.
+    c = 'u';
+
+  if( c == 252 ) // u with two dots.
     c = 'u';
 
   if( c == 263 ) // c with '.
@@ -745,6 +771,9 @@ for( int count = 0; count < max; count++ )
   if( c == 8239 ) // Not showing.
     c = '#';
 
+  if( c == 8243 )
+    c = '\"';
+
   if( c == 8294 ) // Says LRI.
     c = '#';
 
@@ -757,10 +786,16 @@ for( int count = 0; count < max; count++ )
   if( c == 8457 ) // Farenheit degrees.
     c = 'F';
 
+  if( c == 8482 ) // Trademark.
+    c = ' ';
+
   if( c == 8531 ) // 1/3 symbol
     c = '#';
 
   if( c == 9654 ) // A triangle symbol
+    c = '#';
+
+  if( c == 9996 ) // Peace hand sign
     c = '#';
 
 
