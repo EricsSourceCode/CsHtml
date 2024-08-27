@@ -1,3 +1,6 @@
+/*
+
+
 // Copyright Eric Chauvin 2024.
 
 
@@ -375,9 +378,6 @@ for( int count = 0; count < last; count++ )
   if( isBadWord( word ))
     continue;
 
-  // Count duplicates.
-  // if( keyExists( word ))
-
   addWord( word );
   }
 }
@@ -728,3 +728,7 @@ mData.showStatus( "Finished sort by count." );
 
 
 } // Class
+
+
+*/
+

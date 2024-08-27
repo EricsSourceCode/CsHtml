@@ -188,6 +188,7 @@ return linkText;
 
 
 
+/*
 internal string getWordsLine()
 {
 string result = Str.replace( parags,
@@ -202,7 +203,7 @@ result = Str.toLower( result );
 result = Str.trim( result );
 return result;
 }
-
+*/
 
 
 } // Class
