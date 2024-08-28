@@ -22,8 +22,15 @@ public class Story
 {
 private MainData mData;
 private string linkText = "";
-// DateTime when it was downloaded.
+
+// The old Java linkdate is when the link was
+// found.  Not when the HTML file was
+// downloaded.  But it won't read the story,
+// and create the story object, until
+// the file is downloaded.
+
 private TimeEC linkDate;
+
 private string urlFrom = "";
 private string parags = "";
 
@@ -106,7 +113,8 @@ if( last < 4 )
   }
 
 urlFrom = parts.getStrAt( 0 );
-linkDate.setFromDelim( parts.getStrAt( 1 ));
+linkDate.setFromMarkerDelim(
+                         parts.getStrAt( 1 ));
 linkText = parts.getStrAt( 2 );
 parags = parts.getStrAt( 3 );
 return true;
@@ -170,6 +178,14 @@ parags = toCopy.parags;
 internal string getParags()
 {
 return parags;
+}
+
+
+internal string getParagsVecText()
+{
+return Str.replace( parags,
+                    "" + MarkersAI.StoryParagDelim,
+                    "\n" );
 }
 
 

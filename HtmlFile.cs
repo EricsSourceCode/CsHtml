@@ -272,6 +272,8 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "<b>", "" );
   para = Str.replace( para, "</b>", "" );
   para = Str.replace( para, "<br>", "" );
+  para = Str.replace( para, "<u>", "" );
+  para = Str.replace( para, "< u>", "" );
 
   para = Str.replace( para, " ,", "," );
   para = Str.replace( para, "\r", " " );
@@ -612,38 +614,40 @@ for( int count = 0; count < max; count++ )
   char c = inS[count];
   if( c == 160 ) // non breaking space?
     c = ' ';
+
   if( c == 163 ) // strange character
-    c = '#';
+    continue;
+    // c = '#';
 
   if( c == 167 ) // strange character
-    c = '#';
+    continue;
 
   if( c == 169 ) // Copyright
-    c = '#';
+    continue;
 
   if( c == 173 )
     c = '-';
 
   if( c == 174 ) // Rights symbol
-    c = '#';
+    continue;
 
   if( c == 176 ) // Little circle
-    c = '#';
+    continue;
 
   if( c == 177 ) // +- symbol
-    c = '#';
+    continue;
 
   if( c == 180 ) // apostrophe
     c = '\'';
 
   if( c == 188 ) // 1/4 symbol
-    c = '#';
+    continue;
 
   if( c == 189 ) // 1/2 symbol
-    c = '#';
+    continue;
 
   if( c == 190 ) // 3/4 symbol
-    c = '#';
+    continue;
 
   if( c == 201 )
     c = 'E';
@@ -658,6 +662,9 @@ for( int count = 0; count < max; count++ )
     c = 'a';
 
   if( c == 226 )
+    c = 'a';
+
+  if( c == 227 )
     c = 'a';
 
   if( c == 231 ) // c with under mark.
@@ -697,7 +704,7 @@ for( int count = 0; count < max; count++ )
     c = 'o';
 
   if( c == 248 ) // Sort of a Phi.
-    c = '#';
+    continue;
 
   if( c == 249 ) // u with '.
     c = 'u';
@@ -717,6 +724,9 @@ for( int count = 0; count < max; count++ )
   if( c == 268 ) // C with reverse hat.
     c = 'C';
 
+  if( c == 281 )
+    c = 'e';
+
   if( c == 283 ) // e with reverse hat.
     c = 'e';
 
@@ -726,6 +736,12 @@ for( int count = 0; count < max; count++ )
   if( c == 333 ) // o with dash on top.
     c = 'o';
 
+  if( c == 347 )
+    c = 's';
+
+  if( c == 380 )
+    c = 'z';
+
   if( c == 699 )
     c = '\'';
 
@@ -733,13 +749,13 @@ for( int count = 0; count < max; count++ )
     c = 'C';
 
   if( c == 8201 ) // Not showing.
-    c = '#';
+    continue;
 
   if( c == 8202 ) // Not showing.
-    c = '#';
+    continue;
 
   if( c == 8203 ) // Not showing.
-    c = '#';
+    continue;
 
   if( c == 8211 ) // dash or hyphen?
     c = '-';
@@ -763,40 +779,40 @@ for( int count = 0; count < max; count++ )
     c = '\"';
 
   if( c == 8226 ) // a Dot.
-    c = '#';
+    continue;
 
   if( c == 8230 ) // 3 dots like ...
-    c = '#';
+    continue;
 
   if( c == 8239 ) // Not showing.
-    c = '#';
+    continue;
 
   if( c == 8243 )
     c = '\"';
 
   if( c == 8294 ) // Says LRI.
-    c = '#';
+    continue;
 
   if( c == 8297 ) // Says PDI.
-    c = '#';
+    continue;
 
-  if( c == 8364 ) // Euro?
-    c = '#';
+  if( c == 8364 ) // Euroish looking thing?
+    continue;
 
   if( c == 8457 ) // Farenheit degrees.
     c = 'F';
 
   if( c == 8482 ) // Trademark.
-    c = ' ';
+    continue;
 
   if( c == 8531 ) // 1/3 symbol
-    c = '#';
+    continue;
 
   if( c == 9654 ) // A triangle symbol
-    c = '#';
+    continue;
 
   if( c == 9996 ) // Peace hand sign
-    c = '#';
+    continue;
 
 
   result += c;

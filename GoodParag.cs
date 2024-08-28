@@ -39,8 +39,8 @@ if( Str.contains( para,
   return false;
 
 if( Str.contains( para,
-    "This material may not be published, " +
-    "broadcast, rewritten, or redistributed." ))
+    "this material may not be published, " +
+    "broadcast, rewritten," ))
 return false;
 
 if( para == "featured shows" )
@@ -67,6 +67,31 @@ if( para == "more brands" )
 if( para == "more shows" )
   return false;
 
+if( para == "subscribed" )
+  return false;
+
+if( para == "<i" )
+  return false;
+
+if( para == "(c) 2024 nbc universal" )
+  return false;
+
+
+if( Str.contains( para,
+    "you've successfully subscribed to this" ))
+  return false;
+
+if( Str.contains( para,
+    "by entering your email and clicking" ))
+return false;
+
+if( Str.contains( para,
+    "you agree to the fox news privacy" ))
+  return false;
+
+if( Str.contains( para,
+   "kurt \"cyberguy\" knutsson is an award-" ))
+  return false;
 
 return true;
 }

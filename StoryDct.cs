@@ -317,7 +317,7 @@ for( int count = 0; count < keySize; count++ )
 
     paraCount += paraCountOne;
 
-    story.showStory();
+    // story.showStory();
 
     // if( paraCountOne > 0 )
       // {
@@ -419,7 +419,8 @@ mData.showStatus( "Finished writing file." );
 
 internal void storySearch( string toFindUrl,
                      string toFind,
-                     double daysBack )
+                     double daysBack,
+                     FloatMatrix paragMatrix )
 {
 toFindUrl = Str.toLower( toFindUrl );
 toFind = Str.toLower( toFind );
@@ -485,7 +486,11 @@ for( int count = 0; count < keySize; count++ )
     // if( isDemocrat )
 
     // mData.showStatus( linkText );
-    story.showStory();
+    paragMatrix.appendFromString( 
+                     story.getParagsVecText());
+
+
+    // story.showStory();
     }
   }
 }
