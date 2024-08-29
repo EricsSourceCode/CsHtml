@@ -269,6 +269,9 @@ for( int count = 1; count < last; count++ )
   para = Str.replace( para, "</em>", "" );
   para = Str.replace( para, "<i>", "" );
   para = Str.replace( para, "</i>", "" );
+
+  para = Str.replace( para, "<i", "" );
+
   para = Str.replace( para, "<b>", "" );
   para = Str.replace( para, "</b>", "" );
   para = Str.replace( para, "<br>", "" );
@@ -655,6 +658,9 @@ for( int count = 0; count < max; count++ )
   if( c == 214 ) // O with two dots.
     c = 'O';
 
+  if( c == 216 ) // O with two dots.
+    c = 'O';
+
   if( c == 224 ) // a with ' mark.
     c = 'a';
 
@@ -665,6 +671,9 @@ for( int count = 0; count < max; count++ )
     c = 'a';
 
   if( c == 227 )
+    c = 'a';
+
+  if( c == 229 )
     c = 'a';
 
   if( c == 231 ) // c with under mark.
@@ -694,13 +703,19 @@ for( int count = 0; count < max; count++ )
   if( c == 239 ) // i with two dots.
     c = 'i';
 
+  if( c == 240 )
+    c = 'o';
+
   if( c == 241 ) // n with tilde.
     c = 'n';
 
   if( c == 243 ) // o with '.
     c = 'o';
 
-  if( c == 244 ) // o with hat.
+  if( c == 244 )
+    c = 'o';
+
+  if( c == 246 )
     c = 'o';
 
   if( c == 248 ) // Sort of a Phi.
@@ -745,8 +760,14 @@ for( int count = 0; count < max; count++ )
   if( c == 699 )
     c = '\'';
 
+  if( c == 700 )
+    c = '\'';
+
   if( c == 1057 )
     c = 'C';
+
+  if( c == 1548 )
+    continue;
 
   if( c == 8201 ) // Not showing.
     continue;
@@ -756,6 +777,9 @@ for( int count = 0; count < max; count++ )
 
   if( c == 8203 ) // Not showing.
     continue;
+
+  if( c == 8208 ) // dash or hyphen?
+    c = '-';
 
   if( c == 8211 ) // dash or hyphen?
     c = '-';

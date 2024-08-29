@@ -419,6 +419,85 @@ mData.showStatus( "Finished writing file." );
 
 internal void storySearch( string toFindUrl,
                      string toFind,
+                     double daysBack )
+{
+toFindUrl = Str.toLower( toFindUrl );
+toFind = Str.toLower( toFind );
+
+TimeEC timeEC = new TimeEC();
+TimeEC oldTime = new TimeEC();
+oldTime.setToNow();
+oldTime.addDays( daysBack );
+// addHours()
+ulong oldIndex = oldTime.getIndex();
+
+// mData.showStatus( "oldIndex: " + oldIndex );
+
+// False is Republican.
+// bool isDemocrat = Str.contains( toFindUrl,
+//                                "msnbc" );
+
+int howMany = 0;
+
+Story story = new Story( mData );
+for( int count = 0; count < keySize; count++ )
+  {
+  if( (count % 20) == 0 )
+    {
+    if( !mData.checkEvents())
+      return;
+
+    }
+
+  howMany++;
+  if( howMany > 50000000 )
+    break;
+
+  int last = lineArray[count].getArrayLast();
+  if( last < 1 )
+    continue;
+
+  // mData.showStatus( "Last: " + last );
+  for( int countR = 0; countR < last; countR++ )
+    {
+    lineArray[count].getCopyStoryAt( story,
+                                     countR );
+
+    ulong linkDateIndex = story.getDateIndex();
+
+    if( linkDateIndex < oldIndex )
+      continue;
+
+    string url = story.getUrl();
+    url = Str.toLower( url );
+    if( !Str.contains( url, toFindUrl ))
+      continue;
+
+    string linkText = story.getLinkText();
+    string linkTextLower =
+                      Str.toLower( linkText );
+
+    if( !Str.contains( linkTextLower, toFind ))
+      continue;
+
+    // string wordsLine = story.getWordsLine();
+    // wordDct.addWordsLine( wordsLine );
+    // if( isDemocrat )
+
+    // mData.showStatus( linkText );
+
+    story.showStory();
+    }
+  }
+}
+
+
+
+=====
+/*
+====
+internal void NeuralSearch( string toFindUrl,
+                     string toFind,
                      double daysBack,
                      FloatMatrix paragMatrix )
 {
@@ -486,15 +565,13 @@ for( int count = 0; count < keySize; count++ )
     // if( isDemocrat )
 
     // mData.showStatus( linkText );
-    paragMatrix.appendFromString( 
-                     story.getParagsVecText());
+internal void nappendFromString( string toSet )
 
-
-    // story.showStory();
+    story.showStory();
     }
   }
 }
-
+*/
 
 
 
