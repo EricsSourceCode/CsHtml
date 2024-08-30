@@ -493,13 +493,12 @@ for( int count = 0; count < keySize; count++ )
 
 
 
-=====
-/*
-====
-internal void NeuralSearch( string toFindUrl,
+
+internal void neuralSearch( string toFindUrl,
                      string toFind,
                      double daysBack,
-                     FloatMatrix paragMatrix )
+                     FloatMatrix paragMatrix,
+                     FloatVec testLabelVec )
 {
 toFindUrl = Str.toLower( toFindUrl );
 toFind = Str.toLower( toFind );
@@ -513,12 +512,9 @@ ulong oldIndex = oldTime.getIndex();
 
 // mData.showStatus( "oldIndex: " + oldIndex );
 
-// False is Republican.
-// bool isDemocrat = Str.contains( toFindUrl,
-//                                "msnbc" );
-
 int howMany = 0;
 
+bool isDemocrat = true;
 Story story = new Story( mData );
 for( int count = 0; count < keySize; count++ )
   {
@@ -553,6 +549,11 @@ for( int count = 0; count < keySize; count++ )
     if( !Str.contains( url, toFindUrl ))
       continue;
 
+    if( Str.contains( url, "msnbc" ))
+      isDemocrat = true;
+    else
+      isDemocrat = false;
+
     string linkText = story.getLinkText();
     string linkTextLower =
                       Str.toLower( linkText );
@@ -560,18 +561,25 @@ for( int count = 0; count < keySize; count++ )
     if( !Str.contains( linkTextLower, toFind ))
       continue;
 
-    // string wordsLine = story.getWordsLine();
-    // wordDct.addWordsLine( wordsLine );
-    // if( isDemocrat )
+    int lastAppend = paragMatrix.getLastAppend();
+    int labelVecSize = testLabelVec.getSize();
+    if( (lastAppend + 1) >= labelVecSize )
+      {
+      testLabelVec.resize(
+                   lastAppend + (1024 * 32));
+      }
 
-    // mData.showStatus( linkText );
-internal void nappendFromString( string toSet )
+    if( isDemocrat )
+      testLabelVec.setVal( lastAppend, 1 );
+    else
+      testLabelVec.setVal( lastAppend, 0 );
 
-    story.showStory();
+    string parags = story.getParagsVecText();
+    paragMatrix.nappendFromString( parags );
     }
   }
 }
-*/
+
 
 
 
