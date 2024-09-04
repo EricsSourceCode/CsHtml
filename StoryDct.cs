@@ -498,7 +498,7 @@ internal void neuralSearch( string toFindUrl,
                      string toFind,
                      double daysBack,
                      FloatMatrix paragMatrix,
-                     FloatVec testLabelVec )
+                     FloatMatrix labelMatrix )
 {
 toFindUrl = Str.toLower( toFindUrl );
 toFind = Str.toLower( toFind );
@@ -514,7 +514,10 @@ ulong oldIndex = oldTime.getIndex();
 
 int howMany = 0;
 
-bool isDemocrat = true;
+paragMatrix.clearLastAppend();
+labelMatrix.clearLastAppend();
+
+float isDemocrat = 1;
 Story story = new Story( mData );
 for( int count = 0; count < keySize; count++ )
   {
@@ -550,9 +553,9 @@ for( int count = 0; count < keySize; count++ )
       continue;
 
     if( Str.contains( url, "msnbc" ))
-      isDemocrat = true;
+      isDemocrat = 1;
     else
-      isDemocrat = false;
+      isDemocrat = 0;
 
     string linkText = story.getLinkText();
     string linkTextLower =
@@ -562,20 +565,15 @@ for( int count = 0; count < keySize; count++ )
       continue;
 
     int lastAppend = paragMatrix.getLastAppend();
-    int labelVecSize = testLabelVec.getSize();
-    if( (lastAppend + 1) >= labelVecSize )
+    if( lastAppend != labelMatrix.getLastAppend())
       {
-      testLabelVec.resize(
-                   lastAppend + (1024 * 32));
+      throw new Exception(
+        "StoryDct labelMatrix last append." );
       }
 
-    if( isDemocrat )
-      testLabelVec.setVal( lastAppend, 1 );
-    else
-      testLabelVec.setVal( lastAppend, 0 );
-
+    labelMatrix.appendOneVal( isDemocrat );
     string parags = story.getParagsVecText();
-    paragMatrix.nappendFromString( parags );
+    paragMatrix.appendFromString( parags );
     }
   }
 }
