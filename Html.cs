@@ -1,5 +1,3 @@
-/*
-
 // Copyright Eric Chauvin 2024.
 
 
@@ -19,7 +17,7 @@ using System;
 // namespace
 
 
-public class HtmlFile
+public class Html
 {
 private MainData mData;
 private string fileName = "";
@@ -37,16 +35,16 @@ private string cDataS = "";
 
 
 
-private HtmlFile()
+private Html()
 {
 }
 
 
-public HtmlFile( MainData useMData,
-                 string useUrl,
-                 string fileNameToUse,
-                 ulong linkDateIndex,
-                 string linkTextToUse )
+public Html( MainData useMData,
+             string useUrl,
+             string fileNameToUse,
+             ulong linkDateIndex,
+             string linkTextToUse )
 {
 mData = useMData;
 fromUrl = useUrl;
@@ -89,7 +87,7 @@ if( fileS.Length < 2 )
 
 
 
-///////////
+/*
 internal void processAnchorTags()
 {
 mData.showStatus( "processAnchorTags()" );
@@ -210,12 +208,16 @@ for( int count = 1; count < last; count++ )
     }
   }
 }
-////////////
+*/
+
+
 
 
 
 internal bool makeStory( Story story )
 {
+return true;
+/*
 StrAr tagParts = new StrAr();
 tagParts.split( htmlS,
                   MarkersAI.BeginParagraphTag );
@@ -312,11 +314,13 @@ if( story.getParags().Length > 0 )
   return true;
 
 return false;
+*/
 }
 
 
 
 
+/*
 private string fixSpanText( string inS )
 {
 if( !Str.contains( inS, "<span" ))
@@ -415,6 +419,7 @@ for( int count = 1; count < lastPara; count++ )
 result = Str.replace( result, "  ", " " );
 return result;
 }
+*/
 
 
 
@@ -464,34 +469,6 @@ result = Str.replace( result, "<!--",
 result = Str.replace( result, "-->",
      "\r\n\r\n\r\n" + MarkersAI.EndHtmlComment );
 
-result = Str.replace( result, "<p>", "<p >" );
-
-// Don't want the <picture> tag.
-result = Str.replace( result, "<p ",
-           "" + MarkersAI.BeginParagraphTag );
-
-result = Str.replace( result, "</p>",
-           "" + MarkersAI.EndParagraphTag );
-
-result = Str.replace( result, "<a ",
-            "" + MarkersAI.BeginAnchorTag );
-
-result = Str.replace( result, "</a>",
-             "" + MarkersAI.EndAnchorTag );
-
-// In case it is upper case.
-result = Str.replace( result, "<P ",
-           "" + MarkersAI.BeginParagraphTag );
-
-result = Str.replace( result, "</P>",
-           "" + MarkersAI.EndParagraphTag );
-
-result = Str.replace( result, "<A ",
-           "" + MarkersAI.BeginAnchorTag );
-
-result = Str.replace( result, "</A>",
-           "" + MarkersAI.EndAnchorTag );
-
 
 bool isInsideCData = false;
 bool isInsideScript = false;
@@ -502,11 +479,14 @@ for( int count = 0; count < last; count++ )
   {
   char testC = Str.charAt( result, count );
 
-  // if( isInsideScript )
-    // {
-
   if( testC == MarkersAI.BeginCData )
     {
+    if( isInsideScript )
+      {
+      mData.showStatus(
+          "Start CData inside script." );
+      }
+
     isInsideCData = true;
     continue;
     }
@@ -519,21 +499,26 @@ for( int count = 0; count < last; count++ )
 
   if( testC == MarkersAI.BeginScript )
     {
-    // if( isInsideCData )
+    if( isInsideHtmlComment )
+      {
+      mData.showStatus(
+            "Script starts inside comment." );
+
+      }
+
+
     isInsideScript = true;
     continue;
     }
 
   if( testC == MarkersAI.EndScript )
     {
-    // if( isInsideCData )
     isInsideScript = false;
     continue;
     }
 
   if( testC == MarkersAI.BeginHtmlComment )
     {
-    // if( isInsideCData )
     isInsideHtmlComment = true;
     continue;
     }
@@ -563,11 +548,14 @@ for( int count = 0; count < last; count++ )
   }
 
 htmlS = htmlBuild.toString();
+
+/*
 htmlS = Str.replace( htmlS, "\r", " " );
 htmlS = Str.replace( htmlS, "\n", " " );
 htmlS = Ampersand.fixChars( htmlS );
 
 // Don't cleanAscii() for the Markers.
+*/
 
 markedUpS = result;
 
@@ -592,6 +580,73 @@ cDataS = cDataBuild.toString();
 
 
 
+internal void markupTags()
+{
+SBuilder htmlBuild = new SBuilder();
+SBuilder tagBuild = new SBuilder();
+SBuilder nonTagBuild = new SBuilder();
+
+bool isInsideTag = false;
+// mData.showStatus( htmlS );
+
+int last = htmlS.Length;
+for( int count = 0; count < last; count++ )
+  {
+  char testC = Str.charAt( htmlS, count );
+
+  if( testC == '<' )
+    {
+    if( isInsideTag )
+      mData.showStatus( "Already inside tag." );
+
+==== Text should be outside of the paragraph 
+tag.  It is not inside any tag.  But immediately
+following the begin-para tag.
+Or the h2 tag or one of the headers.
+Except anchor tag text, which is inside
+that tag.
+
+    string showNonTag = nonTagBuild.toString();
+    mData.showStatus( showNonTag );
+    nonTagBuild.clear();
+
+    isInsideTag = true;
+    }
+
+  if( testC == '>' )
+    {
+    // tagBuild.appendChar( '>' );
+    // string showTag = tagBuild.toString();
+    // mData.showStatus( showTag );
+    tagBuild.clear();
+
+    if( !isInsideTag )
+      {
+      mData.showStatus(
+           "Not already inside tag." );
+      }
+
+    isInsideTag = false;
+    }
+
+  if( isInsideTag )
+    tagBuild.appendChar( testC );
+  else
+    nonTagBuild.appendChar( testC );
+
+  htmlBuild.appendChar( testC );
+  }
+
+htmlS = htmlBuild.toString();
+
+// htmlS = Str.replace( htmlS, "\r", " " );
+
+}
+
+
+
+
+/*
 private void showNonAscii( string toCheck )
 {
 int max = toCheck.Length;
@@ -606,9 +661,11 @@ for( int count = 0; count < max; count++ )
     }
   }
 }
+*/
 
 
 
+/*
 private string fixNonAscii( string inS )
 {
 string result = "";
@@ -846,10 +903,8 @@ for( int count = 0; count < max; count++ )
 
 return result;
 }
+*/
 
 
 
 } // Class
-
-
-*/
