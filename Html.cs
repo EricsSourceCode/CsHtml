@@ -212,114 +212,6 @@ for( int count = 1; count < last; count++ )
 
 
 
-
-
-internal bool makeStory( Story story )
-{
-return true;
-/*
-StrAr tagParts = new StrAr();
-tagParts.split( htmlS,
-                  MarkersAI.BeginParagraphTag );
-int last = tagParts.getLast();
-// mData.showStatus( "tagParts last: " + last );
-
-
-// string beforeFirst = tagParts.getStrAt( 0 );
-// mData.showStatus( "Before first: " +
-//                              beforeFirst );
-
-for( int count = 1; count < last; count++ )
-  {
-  string line = tagParts.getStrAt( count );
-
-  // mData.showStatus( "line: " + line );
-
-  StrAr paraParts = new StrAr();
-  paraParts.split( line,
-                   MarkersAI.EndParagraphTag );
-
-  int lastPara = paraParts.getLast();
-  if( lastPara < 1 )
-    continue;
-
-  string para = paraParts.getStrAt( 0 );
-
-  // Looking for the end of the parameter
-  // for the P tag.
-  // if( !Str.contains( para, ">" ))
-    // continue;
-
-  para = Str.removeUpToC( para, '>' );
-
-  // mData.showStatus( " " );
-  // mData.showStatus( "para: " + para );
-
-  // mData.showStatus( " " );
-  // mData.showStatus( "para: " + para );
-
-  para = fixAnchorText( para );
-
-  // mData.showStatus( " " );
-  // mData.showStatus( "After anchors: " + para );
-
-  para = fixSpanText( para );
-
-  para = Str.replace( para, "<strong>", "" );
-  para = Str.replace( para, "<strong", "" );
-  para = Str.replace( para, "</strong>", "" );
-  para = Str.replace( para, "</span>", "" );
-  para = Str.replace( para, "<em>", "" );
-  para = Str.replace( para, "</em>", "" );
-  para = Str.replace( para, "<i>", "" );
-  para = Str.replace( para, "</i>", "" );
-
-  para = Str.replace( para, "<i", "" );
-
-  para = Str.replace( para, "<b>", "" );
-  para = Str.replace( para, "</b>", "" );
-  para = Str.replace( para, "<br>", "" );
-  para = Str.replace( para, "<u>", "" );
-  para = Str.replace( para, "< u>", "" );
-
-  para = Str.replace( para, " ,", "," );
-  para = Str.replace( para, "\r", " " );
-  para = Str.replace( para, "\n", " " );
-  para = Str.replace( para, "\t", " " );
-
-  para = Str.replace( para, "/", " " );
-
-  para = Ampersand.fixChars( para );
-
-  para = fixNonAscii( para );
-  showNonAscii( para );
-
-  para = Str.cleanAscii( para );
-
-  para = Str.replace( para, "  ", " " );
-  para = Str.replace( para, "  ", " " );
-  para = Str.replace( para, "  ", " " );
-
-  para = Str.trim( para );
-  if( para.Length == 0 )
-    continue;
-
-  if( !GoodParag.isGoodParag( para ))
-    continue;
-
-  story.appendParaG( para );
-  }
-
-if( story.getParags().Length > 0 )
-  return true;
-
-return false;
-*/
-}
-
-
-
-
 /*
 private string fixSpanText( string inS )
 {
@@ -358,11 +250,11 @@ result = Str.replace( result, "  ", " " );
 result = Str.replace( result, "  ", " " );
 return result;
 }
+*/
 
 
 
-
-
+/*
 private string fixAnchorText( string inS )
 {
 if( !Str.contains( inS,
@@ -446,7 +338,6 @@ SBuilder cDataBuild = new SBuilder();
 
 // There are no parameters on ending tags
 // like this: </a>.
-
 
 // Replacing things in the right order here.
 
@@ -552,8 +443,6 @@ htmlS = htmlBuild.toString();
 /*
 htmlS = Str.replace( htmlS, "\r", " " );
 htmlS = Str.replace( htmlS, "\n", " " );
-htmlS = Ampersand.fixChars( htmlS );
-
 // Don't cleanAscii() for the Markers.
 */
 
@@ -580,53 +469,96 @@ cDataS = cDataBuild.toString();
 
 
 
-internal void markupTags()
+
+internal bool makeStory( Story story )
 {
-SBuilder htmlBuild = new SBuilder();
+// SBuilder htmlBuild = new SBuilder();
 SBuilder tagBuild = new SBuilder();
 SBuilder nonTagBuild = new SBuilder();
 
 bool isInsideTag = false;
-// mData.showStatus( htmlS );
 
 int last = htmlS.Length;
 for( int count = 0; count < last; count++ )
   {
+  if( (count % 50) == 0 )
+    {
+    if( !mData.checkEvents())
+      return false;
+
+    }
+
   char testC = Str.charAt( htmlS, count );
 
   if( testC == '<' )
     {
     if( isInsideTag )
-      mData.showStatus( "Already inside tag." );
-
-==== Text should be outside of the paragraph 
-tag.  It is not inside any tag.  But immediately
-following the begin-para tag.
-Or the h2 tag or one of the headers.
-Except anchor tag text, which is inside
-that tag.
-
-    string showNonTag = nonTagBuild.toString();
-    mData.showStatus( showNonTag );
-    nonTagBuild.clear();
+      {
+      mData.showStatus( " " );
+      mData.showStatus(
+                   "< Already inside tag." );
+      // mData.showStatus( showTag );
+      mData.showStatus( " " );
+      }
 
     isInsideTag = true;
+    tagBuild.clear();
+    tagBuild.appendChar( '<' );
+
+    // A paragraph or heading or something.
+    string para = nonTagBuild.toString();
+    nonTagBuild.clear();
+
+    para = Str.trim( para );
+    if( para.Length < 1 )
+      continue;
+
+    para = Ampersand.fixChars( para );
+====
+    para = fixNonAscii( para );
+    showNonAscii( para );
+
+    para = Str.cleanAscii( para );
+
+    // para = Str.replace( para, "  ", " " );
+    // para = Str.replace( para, "  ", " " );
+    // para = Str.replace( para, "  ", " " );
+
+    para = Str.trim( para );
+    if( para.Length == 0 )
+      continue;
+
+    if( !GoodParag.isGoodParag( para ))
+      continue;
+
+    // mData.showStatus( " " );
+    // mData.showStatus( "Para: " + para );
+
+    story.appendParaG( para );
+    continue;
     }
 
   if( testC == '>' )
     {
-    // tagBuild.appendChar( '>' );
-    // string showTag = tagBuild.toString();
-    // mData.showStatus( showTag );
+    tagBuild.appendChar( '>' );
+    string showTag = tagBuild.toString();
+
+    if( Str.startsWith( showTag, "a " ))
+      mData.showStatus( "Tag: " + showTag );
+
     tagBuild.clear();
 
     if( !isInsideTag )
       {
+      mData.showStatus( " " );
       mData.showStatus(
-           "Not already inside tag." );
+                   "Not already inside tag." );
+      mData.showStatus( showTag );
+      mData.showStatus( " " );
       }
 
     isInsideTag = false;
+    continue;
     }
 
   if( isInsideTag )
@@ -634,26 +566,22 @@ that tag.
   else
     nonTagBuild.appendChar( testC );
 
-  htmlBuild.appendChar( testC );
   }
 
-htmlS = htmlBuild.toString();
-
-// htmlS = Str.replace( htmlS, "\r", " " );
-
+return true;
 }
 
 
 
 
-/*
+
 private void showNonAscii( string toCheck )
 {
 int max = toCheck.Length;
 for( int count = 0; count < max; count++ )
   {
   char c = toCheck[count];
-  if( c > 127 )
+  if( (c > 127) ) // || (c < ' ') )
     {
     int showC = c;
     mData.showStatus( "showC: " + showC + ") " +
@@ -661,22 +589,25 @@ for( int count = 0; count < max; count++ )
     }
   }
 }
-*/
 
 
 
-/*
+
+
 private string fixNonAscii( string inS )
 {
-string result = "";
+string result = inS;
 
-int max = inS.Length;
-for( int count = 0; count < max; count++ )
+if( result.Length < 1 )
+  return "";
+
+if( Str.contains( result, "" + (char)160 ))
   {
-  char c = inS[count];
-  if( c == 160 ) // non breaking space?
-    c = ' ';
+  result = Str.replace( result,
+              "" + (char)160, " " );
+  }
 
+/*
   if( c == 163 ) // strange character
     continue;
     // c = '#';
@@ -849,11 +780,24 @@ for( int count = 0; count < max; count++ )
   if( c == 8213 ) // dash or hyphen?
     c = '-';
 
-  if( c == 8216 ) // single quote, apostrophe.
-    c = '\'';
+*/
 
-  if( c == 8217 ) // single quote, apostrophe.
-    c = '\'';
+
+if( Str.contains( result, "" + (char)8216 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8216, "\'" );
+  }
+
+if( Str.contains( result, "" + (char)8217 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8217, "\'" );
+  }
+
+
+
+/*
 
   if( c == 8220 )
     c = '\"';
@@ -900,10 +844,11 @@ for( int count = 0; count < max; count++ )
 
   result += c;
   }
+*/
 
 return result;
 }
-*/
+
 
 
 

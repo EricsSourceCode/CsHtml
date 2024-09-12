@@ -17,6 +17,7 @@ using System;
 // namespace
 
 
+
 public static class Ampersand
 {
 
@@ -464,6 +465,7 @@ result = Str.replace( result, "&aacute;",
 
 return result;
 }
+
 
 
 } // Class

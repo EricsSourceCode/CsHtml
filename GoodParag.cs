@@ -26,6 +26,41 @@ static internal bool isGoodParag( string para )
 para = Str.toLower( para );
 para = Str.trim( para );
 
+// The period following anchor text.
+if( para == "." )
+  return true;
+
+if( para == "fox news" )
+  return false;
+
+if( para == "legal statement" )
+  return false;
+
+if( Str.contains( para, 
+       "mutual fund and etf data provided by" ))
+  return false;
+ 
+if( Str.contains( para,"refinitiv lipper" ))
+  return false;
+
+
+// No single space in the line.  One word.
+if( !Str.contains( para, " " ))
+  return false;
+
+if( Str.contains( para, ".video-player" ))
+  return false;
+
+if( Str.contains( para,
+    "this material may not be published, " +
+    "broadcast, rewritten," ))
+return false;
+
+if( Str.contains( para, "(Getty Images)" ))
+  return false;
+
+
+/*
 if( Str.contains( para,
                   "class=\"copyright\"" ) ||
     Str.contains( para,
@@ -36,41 +71,6 @@ if( Str.contains( para,
                "class=\"dek\"" ) ||
     Str.contains( para,
       ".foxnews.com/download" ))
-  return false;
-
-if( Str.contains( para,
-    "this material may not be published, " +
-    "broadcast, rewritten," ))
-return false;
-
-if( para == "featured shows" )
-  return false;
-
-if( para == "weekday shows" )
-  return false;
-
-if( para == "weekend shows" )
-  return false;
-
-if( para == "msnbc tv" )
-  return false;
-
-if( para == "more" )
-  return false;
-
-if( para == "follow msnbc" )
-  return false;
-
-if( para == "more brands" )
-  return false;
-
-if( para == "more shows" )
-  return false;
-
-if( para == "subscribed" )
-  return false;
-
-if( para == "<i" )
   return false;
 
 if( para == "(c) 2024 nbc universal" )
@@ -92,6 +92,7 @@ if( Str.contains( para,
 if( Str.contains( para,
    "kurt \"cyberguy\" knutsson is an award-" ))
   return false;
+*/
 
 return true;
 }
