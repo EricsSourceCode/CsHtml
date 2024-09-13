@@ -368,18 +368,12 @@ result = Str.replace( result, "<style",
 result = Str.replace( result, "</style>",
      "\r\n\r\n\r\n" + MarkersAI.StyleTagEnd );
 
-result = Str.replace( result, "<link",
-     "\r\n\r\n\r\n" + MarkersAI.LinkTagStart );
-
-result = Str.replace( result, "</link>",
-     "\r\n\r\n\r\n" + MarkersAI.LinkTagEnd );
 
 
 bool isInsideCData = false;
 bool isInsideScript = false;
 bool isInsideHtmlComment = false;
 bool isInsideStyleTag = false;
-bool isInsideLinkTag = false;
 
 int last = result.Length;
 for( int count = 0; count < last; count++ )
@@ -413,18 +407,6 @@ for( int count = 0; count < last; count++ )
   if( testC == MarkersAI.StyleTagEnd )
     {
     isInsideStyleTag = false;
-    continue;
-    }
-
-  if( testC == MarkersAI.LinkTagStart )
-    {
-    isInsideLinkTag = true;
-    continue;
-    }
-
-  if( testC == MarkersAI.LinkTagEnd )
-    {
-    isInsideLinkTag = false;
     continue;
     }
 
@@ -472,8 +454,7 @@ for( int count = 0; count < last; count++ )
   if( !(isInsideCData ||
         isInsideScript ||
         isInsideHtmlComment ||
-        isInsideStyleTag ||
-        isInsideLinkTag ))
+        isInsideStyleTag ))
     {
     htmlBuild.appendChar( testC );
     }
@@ -489,6 +470,7 @@ markedUpS = result;
 // mData.showStatus( "htmlS:" );
 // mData.showStatus( htmlS );
 
+// mData.showStatus( " " );
 // mData.showStatus( "markedUpS:" );
 // mData.showStatus( markedUpS );
 
@@ -542,37 +524,7 @@ for( int count = 0; count < last; count++ )
     tagBuild.clear();
     tagBuild.appendChar( '<' );
 
-    // A paragraph or heading or something.
-    string para = nonTagBuild.toString();
-    nonTagBuild.clear();
-
-    para = Str.trim( para );
-    if( para.Length < 1 )
-      continue;
-
-    para = Ampersand.fixChars( para );
-
-    para = NonAscii.fixIt( para );
-    showNonAscii( para );
-
-    para = Str.cleanAscii( para );
-
-    // para = Str.replace( para, "  ", " " );
-    // para = Str.replace( para, "  ", " " );
-    // para = Str.replace( para, "  ", " " );
-
-    // Trim it again.
-    para = Str.trim( para );
-    if( para.Length == 0 )
-      continue;
-
-    // if( !GoodParag.isGoodParag( para ))
-      // continue;
-
-    // mData.showStatus( " " );
-    // mData.showStatus( "Para: " + para );
-
-    story.appendParaG( para );
+    addNonTagText( story, nonTagBuild );
     continue;
     }
 
@@ -581,8 +533,11 @@ for( int count = 0; count < last; count++ )
     tagBuild.appendChar( '>' );
     string showTag = tagBuild.toString();
 
-    if( Str.startsWith( showTag, "a " ))
-      mData.showStatus( "Tag: " + showTag );
+    // The text of the anchor tag is already
+    // non tag text.  It is after the anchor
+    // start tag.
+    // if( Str.startsWith( showTag, "<a " ))
+      // mData.showStatus( "<a>" );
 
     tagBuild.clear();
 
@@ -612,6 +567,41 @@ return true;
 }
 
 
+
+private void addNonTagText( Story story,
+                         SBuilder nonTagBuild )
+{
+// A paragraph or heading or something that
+// is not inside any tags.
+
+string para = nonTagBuild.toString();
+nonTagBuild.clear();
+
+para = Str.trim( para );
+if( para.Length < 1 )
+  return;
+
+// mData.showStatus( " " );
+// mData.showStatus( "addNonTagText()" );
+
+para = Ampersand.fixChars( para );
+para = NonAscii.fixIt( para );
+showNonAscii( para );
+para = Str.cleanAscii( para );
+
+// Trim it again.
+para = Str.trim( para );
+if( para.Length == 0 )
+  return;
+
+// if( !GoodParag.isGoodParag( para ))
+//  return;
+
+// mData.showStatus( " " );
+// mData.showStatus( "Para: " + para );
+
+story.appendParaG( para );
+}
 
 
 

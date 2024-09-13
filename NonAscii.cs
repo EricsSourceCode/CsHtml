@@ -429,5 +429,3 @@ return result;
 
 
 } // Class
-
-
