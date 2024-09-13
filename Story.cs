@@ -90,6 +90,7 @@ paraAr.split( parags,
 int last = paraAr.getLast();
 for( int count = 0; count < last; count++ )
   {
+  mData.showStatus( "Paragraph " + count );
   mData.showStatus( paraAr.getStrAt( count ));
   mData.showStatus( " " );
   }

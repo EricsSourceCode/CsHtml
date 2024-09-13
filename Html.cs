@@ -32,7 +32,8 @@ private string markedUpS = "";
 private string htmlS = "";
 private string javaS = "";
 private string cDataS = "";
-
+// private string styleS = "";
+// private string linkS = "";
 
 
 private Html()
@@ -322,6 +323,7 @@ SBuilder scrBuild = new SBuilder();
 SBuilder htmlBuild = new SBuilder();
 SBuilder javaBuild = new SBuilder();
 SBuilder cDataBuild = new SBuilder();
+// SBuilder styleBuild = new SBuilder();
 
 // CData can be commented out within a script:
 // slash star  ]]><![CDATA[  star slash.
@@ -360,10 +362,24 @@ result = Str.replace( result, "<!--",
 result = Str.replace( result, "-->",
      "\r\n\r\n\r\n" + MarkersAI.EndHtmlComment );
 
+result = Str.replace( result, "<style",
+     "\r\n\r\n\r\n" + MarkersAI.StyleTagStart );
+
+result = Str.replace( result, "</style>",
+     "\r\n\r\n\r\n" + MarkersAI.StyleTagEnd );
+
+result = Str.replace( result, "<link",
+     "\r\n\r\n\r\n" + MarkersAI.LinkTagStart );
+
+result = Str.replace( result, "</link>",
+     "\r\n\r\n\r\n" + MarkersAI.LinkTagEnd );
+
 
 bool isInsideCData = false;
 bool isInsideScript = false;
 bool isInsideHtmlComment = false;
+bool isInsideStyleTag = false;
+bool isInsideLinkTag = false;
 
 int last = result.Length;
 for( int count = 0; count < last; count++ )
@@ -388,6 +404,30 @@ for( int count = 0; count < last; count++ )
     continue;
     }
 
+  if( testC == MarkersAI.StyleTagStart )
+    {
+    isInsideStyleTag = true;
+    continue;
+    }
+
+  if( testC == MarkersAI.StyleTagEnd )
+    {
+    isInsideStyleTag = false;
+    continue;
+    }
+
+  if( testC == MarkersAI.LinkTagStart )
+    {
+    isInsideLinkTag = true;
+    continue;
+    }
+
+  if( testC == MarkersAI.LinkTagEnd )
+    {
+    isInsideLinkTag = false;
+    continue;
+    }
+
   if( testC == MarkersAI.BeginScript )
     {
     if( isInsideHtmlComment )
@@ -396,7 +436,6 @@ for( int count = 0; count < last; count++ )
             "Script starts inside comment." );
 
       }
-
 
     isInsideScript = true;
     continue;
@@ -432,7 +471,9 @@ for( int count = 0; count < last; count++ )
 
   if( !(isInsideCData ||
         isInsideScript ||
-        isInsideHtmlComment ))
+        isInsideHtmlComment ||
+        isInsideStyleTag ||
+        isInsideLinkTag ))
     {
     htmlBuild.appendChar( testC );
     }
@@ -440,11 +481,7 @@ for( int count = 0; count < last; count++ )
 
 htmlS = htmlBuild.toString();
 
-/*
-htmlS = Str.replace( htmlS, "\r", " " );
-htmlS = Str.replace( htmlS, "\n", " " );
 // Don't cleanAscii() for the Markers.
-*/
 
 markedUpS = result;
 
@@ -514,8 +551,8 @@ for( int count = 0; count < last; count++ )
       continue;
 
     para = Ampersand.fixChars( para );
-====
-    para = fixNonAscii( para );
+
+    para = NonAscii.fixIt( para );
     showNonAscii( para );
 
     para = Str.cleanAscii( para );
@@ -524,12 +561,13 @@ for( int count = 0; count < last; count++ )
     // para = Str.replace( para, "  ", " " );
     // para = Str.replace( para, "  ", " " );
 
+    // Trim it again.
     para = Str.trim( para );
     if( para.Length == 0 )
       continue;
 
-    if( !GoodParag.isGoodParag( para ))
-      continue;
+    // if( !GoodParag.isGoodParag( para ))
+      // continue;
 
     // mData.showStatus( " " );
     // mData.showStatus( "Para: " + para );
@@ -553,7 +591,9 @@ for( int count = 0; count < last; count++ )
       mData.showStatus( " " );
       mData.showStatus(
                    "Not already inside tag." );
-      mData.showStatus( showTag );
+      string showNonTag = nonTagBuild.toString();
+
+      mData.showStatus( showNonTag );
       mData.showStatus( " " );
       }
 
@@ -588,265 +628,6 @@ for( int count = 0; count < max; count++ )
                                  c );
     }
   }
-}
-
-
-
-
-
-private string fixNonAscii( string inS )
-{
-string result = inS;
-
-if( result.Length < 1 )
-  return "";
-
-if( Str.contains( result, "" + (char)160 ))
-  {
-  result = Str.replace( result,
-              "" + (char)160, " " );
-  }
-
-/*
-  if( c == 163 ) // strange character
-    continue;
-    // c = '#';
-
-  if( c == 167 ) // strange character
-    continue;
-
-  if( c == 169 ) // Copyright
-    continue;
-
-  if( c == 173 )
-    c = '-';
-
-  if( c == 174 ) // Rights symbol
-    continue;
-
-  if( c == 176 ) // Little circle
-    continue;
-
-  if( c == 177 ) // +- symbol
-    continue;
-
-  if( c == 180 ) // apostrophe
-    c = '\'';
-
-  if( c == 188 ) // 1/4 symbol
-    continue;
-
-  if( c == 189 ) // 1/2 symbol
-    continue;
-
-  if( c == 190 ) // 3/4 symbol
-    continue;
-
-  if( c == 201 )
-    c = 'E';
-
-  if( c == 214 ) // O with two dots.
-    c = 'O';
-
-  if( c == 216 ) // O with two dots.
-    c = 'O';
-
-  if( c == 224 ) // a with ' mark.
-    c = 'a';
-
-  if( c == 225 ) // a with ' mark.
-    c = 'a';
-
-  if( c == 226 )
-    c = 'a';
-
-  if( c == 227 )
-    c = 'a';
-
-  if( c == 229 )
-    c = 'a';
-
-  if( c == 231 ) // c with under mark.
-    c = 'c';
-
-  if( c == 232 ) // e with ' mark.
-    c = 'e';
-
-  if( c == 233 ) // e with ' mark.
-    c = 'e';
-
-  if( c == 234 ) // e with hat.
-    c = 'e';
-
-  if( c == 235 ) // e two dots.
-    c = 'e';
-
-  if( c == 236 )
-    c = 'i';
-
-  if( c == 237 ) // i with slanted dot.
-    c = 'i';
-
-  if( c == 238 ) // i with hat.
-    c = 'i';
-
-  if( c == 239 ) // i with two dots.
-    c = 'i';
-
-  if( c == 240 )
-    c = 'o';
-
-  if( c == 241 ) // n with tilde.
-    c = 'n';
-
-  if( c == 243 ) // o with '.
-    c = 'o';
-
-  if( c == 244 )
-    c = 'o';
-
-  if( c == 246 )
-    c = 'o';
-
-  if( c == 248 ) // Sort of a Phi.
-    continue;
-
-  if( c == 249 ) // u with '.
-    c = 'u';
-
-  if( c == 250 ) // u with '.
-    c = 'u';
-
-  if( c == 251 ) // u with hat.
-    c = 'u';
-
-  if( c == 252 ) // u with two dots.
-    c = 'u';
-
-  if( c == 263 ) // c with '.
-    c = 'c';
-
-  if( c == 268 ) // C with reverse hat.
-    c = 'C';
-
-  if( c == 281 )
-    c = 'e';
-
-  if( c == 283 ) // e with reverse hat.
-    c = 'e';
-
-  if( c == 287 ) // g with reverse hat.
-    c = 'g';
-
-  if( c == 333 ) // o with dash on top.
-    c = 'o';
-
-  if( c == 347 )
-    c = 's';
-
-  if( c == 380 )
-    c = 'z';
-
-  if( c == 699 )
-    c = '\'';
-
-  if( c == 700 )
-    c = '\'';
-
-  if( c == 1057 )
-    c = 'C';
-
-  if( c == 1548 )
-    continue;
-
-  if( c == 8201 ) // Not showing.
-    continue;
-
-  if( c == 8202 ) // Not showing.
-    continue;
-
-  if( c == 8203 ) // Not showing.
-    continue;
-
-  if( c == 8208 ) // dash or hyphen?
-    c = '-';
-
-  if( c == 8211 ) // dash or hyphen?
-    c = '-';
-
-  if( c == 8212 ) // dash or hyphen?
-    c = '-';
-
-  if( c == 8213 ) // dash or hyphen?
-    c = '-';
-
-*/
-
-
-if( Str.contains( result, "" + (char)8216 ))
-  {
-  result = Str.replace( result,
-              "" + (char)8216, "\'" );
-  }
-
-if( Str.contains( result, "" + (char)8217 ))
-  {
-  result = Str.replace( result,
-              "" + (char)8217, "\'" );
-  }
-
-
-
-/*
-
-  if( c == 8220 )
-    c = '\"';
-
-  if( c == 8221 )
-    c = '\"';
-
-  if( c == 8226 ) // a Dot.
-    continue;
-
-  if( c == 8230 ) // 3 dots like ...
-    continue;
-
-  if( c == 8239 ) // Not showing.
-    continue;
-
-  if( c == 8243 )
-    c = '\"';
-
-  if( c == 8294 ) // Says LRI.
-    continue;
-
-  if( c == 8297 ) // Says PDI.
-    continue;
-
-  if( c == 8364 ) // Euroish looking thing?
-    continue;
-
-  if( c == 8457 ) // Farenheit degrees.
-    c = 'F';
-
-  if( c == 8482 ) // Trademark.
-    continue;
-
-  if( c == 8531 ) // 1/3 symbol
-    continue;
-
-  if( c == 9654 ) // A triangle symbol
-    continue;
-
-  if( c == 9996 ) // Peace hand sign
-    continue;
-
-
-  result += c;
-  }
-*/
-
-return result;
 }
 
 

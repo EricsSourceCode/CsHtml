@@ -36,10 +36,10 @@ if( para == "fox news" )
 if( para == "legal statement" )
   return false;
 
-if( Str.contains( para, 
+if( Str.contains( para,
        "mutual fund and etf data provided by" ))
   return false;
- 
+
 if( Str.contains( para,"refinitiv lipper" ))
   return false;
 
