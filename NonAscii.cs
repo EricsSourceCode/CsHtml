@@ -94,6 +94,12 @@ if( Str.contains( result, "" + (char)190 ))
               "" + (char)190, "3/4" );
   }
 
+if( Str.contains( result, "" + (char)194 ))
+  {
+  result = Str.replace( result,
+              "" + (char)194, "A" );
+  }
+
 if( Str.contains( result, "" + (char)201 ))
   {
   result = Str.replace( result,
@@ -231,20 +237,31 @@ if( Str.contains( result, "" + (char)246 ))
 /*
   if( c == 248 ) // Sort of a Phi.
     continue;
-
-  if( c == 249 ) // u with '.
-    c = 'u';
-
-  if( c == 250 ) // u with '.
-    c = 'u';
-
-  if( c == 251 ) // u with hat.
-    c = 'u';
-
-  if( c == 252 ) // u with two dots.
-    c = 'u';
 */
 
+if( Str.contains( result, "" + (char)249 ))
+  {
+  result = Str.replace( result,
+              "" + (char)249, "u" );
+  }
+
+if( Str.contains( result, "" + (char)250 ))
+  {
+  result = Str.replace( result,
+              "" + (char)250, "u" );
+  }
+
+if( Str.contains( result, "" + (char)251 ))
+  {
+  result = Str.replace( result,
+              "" + (char)251, "u" );
+  }
+
+if( Str.contains( result, "" + (char)252 ))
+  {
+  result = Str.replace( result,
+              "" + (char)252, "u" );
+  }
 
 if( Str.contains( result, "" + (char)257 ))
   {
@@ -253,49 +270,83 @@ if( Str.contains( result, "" + (char)257 ))
   }
 
 
-/*
-  if( c == 263 ) // c with '.
-    c = 'c';
+if( Str.contains( result, "" + (char)263 ))
+  {
+  result = Str.replace( result,
+              "" + (char)263, "c" );
+  }
 
-  if( c == 268 ) // C with reverse hat.
-    c = 'C';
+if( Str.contains( result, "" + (char)268 ))
+  {
+  result = Str.replace( result,
+              "" + (char)268, "C" );
+  }
 
-  if( c == 281 )
-    c = 'e';
+if( Str.contains( result, "" + (char)281 ))
+  {
+  result = Str.replace( result,
+              "" + (char)281, "e" );
+  }
 
-  if( c == 283 ) // e with reverse hat.
-    c = 'e';
+if( Str.contains( result, "" + (char)283 ))
+  {
+  result = Str.replace( result,
+              "" + (char)283, "e" );
+  }
 
-  if( c == 287 ) // g with reverse hat.
-    c = 'g';
+if( Str.contains( result, "" + (char)287 ))
+  {
+  result = Str.replace( result,
+              "" + (char)287, "g" );
+  }
 
-  if( c == 333 ) // o with dash on top.
-    c = 'o';
+if( Str.contains( result, "" + (char)333 ))
+  {
+  result = Str.replace( result,
+              "" + (char)333, "o" );
+  }
 
-  if( c == 347 )
-    c = 's';
+if( Str.contains( result, "" + (char)347 ))
+  {
+  result = Str.replace( result,
+              "" + (char)347, "s" );
+  }
 
-  if( c == 380 )
-    c = 'z';
+if( Str.contains( result, "" + (char)380 ))
+  {
+  result = Str.replace( result,
+              "" + (char)380, "z" );
+  }
 
-  if( c == 699 )
-    c = '\'';
+if( Str.contains( result, "" + (char)699 ))
+  {
+  result = Str.replace( result,
+              "" + (char)699, "\'" );
+  }
 
-  if( c == 700 )
-    c = '\'';
+if( Str.contains( result, "" + (char)700 ))
+  {
+  result = Str.replace( result,
+              "" + (char)700, "\'" );
+  }
 
-  if( c == 1057 )
-    c = 'C';
+if( Str.contains( result, "" + (char)1057 ))
+  {
+  result = Str.replace( result,
+              "" + (char)1057, "C" );
+  }
 
-  if( c == 1548 )
-    continue;
+if( Str.contains( result, "" + (char)8201 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8201, " " );
+  }
 
-  if( c == 8201 ) // Not showing.
-    continue;
-
-  if( c == 8202 ) // Not showing.
-    continue;
-*/
+if( Str.contains( result, "" + (char)8202 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8202, " " );
+  }
 
 
 // Not showing.
@@ -358,11 +409,12 @@ if( Str.contains( result, "" + (char)8221 ))
   }
 
 
-/*
-  if( c == 8226 ) // a Dot.
-    continue;
-*/
-
+// a Dot.
+if( Str.contains( result, "" + (char)8226 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8226, "(*)" );
+  }
 
 if( Str.contains( result, "" + (char)8230 ))
   {
@@ -370,14 +422,12 @@ if( Str.contains( result, "" + (char)8230 ))
               "" + (char)8230, "..." );
   }
 
-
-/*
-  if( c == 8239 ) // Not showing.
-    continue;
-
-  if( c == 8243 )
-    c = '\"';
-*/
+// Not showing.
+if( Str.contains( result, "" + (char)8239 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8239, " " );
+  }
 
 if( Str.contains( result, "" + (char)8294 ))
   {
@@ -385,20 +435,20 @@ if( Str.contains( result, "" + (char)8294 ))
               "" + (char)8294, "[LRI]" );
   }
 
+if( Str.contains( result, "" + (char)8297 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8297, "[PDI]" );
+  }
 
+
+// Trademark.
 /*
-  if( c == 8297 ) // Says PDI.
-    continue;
-
-  if( c == 8364 ) // Euroish looking thing?
-    continue;
-
-  if( c == 8457 ) // Farenheit degrees.
-    c = 'F';
-
-  if( c == 8482 ) // Trademark.
-    continue;
-
+if( Str.contains( result, "" + (char)8492 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8492, "(Tr)" );
+  }
 */
 
 if( Str.contains( result, "" + (char)8531 ))
@@ -412,15 +462,6 @@ if( Str.contains( result, "" + (char)8539 ))
   result = Str.replace( result,
               "" + (char)8539, "1/8" );
   }
-
-/*
-  if( c == 9654 ) // A triangle symbol
-    continue;
-
-  if( c == 9996 ) // Peace hand sign
-    continue;
-
-*/
 
 
 return result;

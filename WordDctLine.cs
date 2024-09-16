@@ -1,6 +1,3 @@
-/*
-
-
 // Copyright Eric Chauvin 2024.
 
 
@@ -49,22 +46,22 @@ sortIndexAr[0] = 0;
 // but not an array of objects.
 valueArray[0] = new Word( mData, "" );
 }
-catch( Exception Except )
+catch( Exception ) // Except )
   {
-  freeAll();
-  mData.showStatus(
-     "Not enough memory for WordDctLine." );
-  mData.showStatus( Except.Message );
-  // return;
+  throw new Exception( 
+       "Not enough memory for WordDctLine." );
+
   }
 }
 
 
+/*
 internal void freeAll()
 {
 arrayLast = 0;
 resizeArrays( 1 );
 }
+*/
 
 
 
@@ -108,7 +105,6 @@ if( newSize > oldSize )
 }
 catch( Exception ) // Except )
   {
-  freeAll();
   throw new Exception(
          "Not enough memory for WordDctLine." );
 
@@ -303,4 +299,4 @@ valueArray[pos].incCount();
 } // Class
 
 
-*/
+

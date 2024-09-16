@@ -1,7 +1,3 @@
-====
-/*
-
-
 // Copyright Eric Chauvin 2024.
 
 
@@ -52,22 +48,21 @@ for( int count = 0; count < keySize; count++ )
   lineArray[count] = new WordDctLine( mData );
 
 }
-catch( Exception Except )
+catch( Exception ) // Except )
   {
-  freeAll();
-  mData.showStatus(
+  throw new Exception( 
            "Not enough memory for WordDct." );
-  mData.showStatus( Except.Message );
-  // return;
   }
 }
 
 
 
+/*
 internal void freeAll()
 {
-// lineArray = null;
+// resize()
 }
+*/
 
 
 
@@ -121,14 +116,12 @@ if( index1 > 27 )
 
 if( index1 < 0 )
   {
-  throw new Exception(
-         "index1 < 0." );
+  throw new Exception( "index1 < 0." );
   }
 
 if( index2 < 0 )
   {
-  throw new Exception(
-         "index2 < 0." );
+  throw new Exception( "index2 < 0." );
   }
 
 // 5 bits.
@@ -152,7 +145,6 @@ if( index >= keySize )
 
 return index;
 }
-
 
 
 
@@ -352,6 +344,9 @@ mData.showStatus( "Finished writing file." );
 
 
 
+/*
+Break a sentence in to separate words and
+add each word separately.
 
 internal void addWordsLine( string line )
 {
@@ -382,10 +377,10 @@ for( int count = 0; count < last; count++ )
   addWord( word );
   }
 }
+*/
 
 
-
-
+/*
 internal string removePunctuation( string word )
 {
 string result = "";
@@ -472,9 +467,11 @@ for( int count = 0; count < last; count++ )
 
 return result;
 }
+*/
 
 
 
+/*
 internal bool isBadWord( string word )
 {
 // An email address:
@@ -483,11 +480,11 @@ if( Str.contains( word, "@" ))
 
 return false;
 }
+*/
 
 
 
-
-private void addWord( string wordS )
+internal void addWord( string wordS )
 {
 if( wordS == null )
   return;
@@ -507,7 +504,7 @@ if( lineArray[arIndex].keyExists( wordS ))
   return;
   }
 
-mData.showStatus( "New word: " + wordS );
+// mData.showStatus( "New word: " + wordS );
 
 Word toAdd = new Word( mData, wordS );
 toAdd.setCount( 1 );
@@ -729,6 +726,3 @@ mData.showStatus( "Finished sort by count." );
 
 
 } // Class
-
-
-*/

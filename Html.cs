@@ -489,7 +489,8 @@ cDataS = cDataBuild.toString();
 
 
 
-internal bool makeStory( Story story )
+internal bool makeStory( Story story,
+                         WordDct paragDct )
 {
 // SBuilder htmlBuild = new SBuilder();
 SBuilder tagBuild = new SBuilder();
@@ -524,7 +525,8 @@ for( int count = 0; count < last; count++ )
     tagBuild.clear();
     tagBuild.appendChar( '<' );
 
-    addNonTagText( story, nonTagBuild );
+    addNonTagText( story, nonTagBuild, 
+                   paragDct );
     continue;
     }
 
@@ -569,7 +571,8 @@ return true;
 
 
 private void addNonTagText( Story story,
-                         SBuilder nonTagBuild )
+                         SBuilder nonTagBuild,
+                         WordDct paragDct )
 {
 // A paragraph or heading or something that
 // is not inside any tags.
@@ -587,6 +590,8 @@ if( para.Length < 1 )
 para = Ampersand.fixChars( para );
 para = NonAscii.fixIt( para );
 showNonAscii( para );
+para = Str.replace( para, "\r", " " );
+para = Str.replace( para, "\n", " " );
 para = Str.cleanAscii( para );
 
 // Trim it again.
@@ -597,11 +602,14 @@ if( para.Length == 0 )
 // if( !GoodParag.isGoodParag( para ))
 //  return;
 
-// mData.showStatus( " " );
-// mData.showStatus( "Para: " + para );
+======
+if( !paragDct.keyExists( para ))
+  story.appendParaG( para );
 
-story.appendParaG( para );
+// Add the count if it already exists.
+paragDct.addWord( para );
 }
+
 
 
 

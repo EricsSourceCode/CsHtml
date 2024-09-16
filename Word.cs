@@ -1,6 +1,3 @@
-/*
-
-
 // Copyright Eric Chauvin 2024.
 
 
@@ -20,13 +17,14 @@ using System;
 // namespace
 
 
+// A word or a sequence of words like a
+// sentence or paragraph.
+
 
 public class Word
 {
 private MainData mData;
 private string word = "";
-// The idNum gets multiplied by a weight,
-// so it has to be >= 1 to be valid.
 private int idNum = 0;
 private int count = 0;
 
@@ -149,4 +147,4 @@ return count;
 } // Class
 
 
-*/
+
