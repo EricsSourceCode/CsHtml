@@ -36,11 +36,13 @@ private Word()
 
 
 
+// This is the only way to set a new word.
 internal Word( MainData mDataToUse,
                string wordS )
 {
 mData = mDataToUse;
-word = wordS;
+word = Str.trim( wordS );
+word = Str.toLower( wordS );
 }
 
 
@@ -85,7 +87,8 @@ string result = word +
                 idNum +
                 MarkersAI.WordDelim +
                 count +
-                MarkersAI.WordDelim;
+                MarkersAI.WordDelim +
+                "\r\n";
 
 return result;
 }
@@ -144,7 +147,24 @@ return count;
 
 
 
+internal bool wordIsEqual( string toCheck )
+{
+if( toCheck == null )
+  return false;
+
+toCheck = Str.trim( toCheck );
+if( toCheck.Length < 1 )
+  return false;
+
+toCheck = Str.toLower( toCheck );
+
+// if( toCheck == Str.toLower( word ))
+if( toCheck == word )
+  return true;
+
+return false;
+}
+
+
+
 } // Class
-
-
-

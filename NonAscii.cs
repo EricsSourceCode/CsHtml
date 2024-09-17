@@ -38,14 +38,24 @@ if( Str.contains( result, "" + (char)160 ))
               "" + (char)160, " " );
   }
 
-/*
-  if( c == 163 ) // strange character
-    continue;
-    // c = '#';
+// Upside down exclamation.
+if( Str.contains( result, "" + (char)161 ))
+  {
+  result = Str.replace( result,
+              "" + (char)161, "(!)" );
+  }
 
-  if( c == 167 ) // strange character
-    continue;
-*/
+if( Str.contains( result, "" + (char)163 ))
+  {
+  result = Str.replace( result,
+              "" + (char)163, "(pound$)" );
+  }
+
+if( Str.contains( result, "" + (char)167 ))
+  {
+  result = Str.replace( result,
+              "" + (char)167, "(*section)" );
+  }
 
 if( Str.contains( result, "" + (char)169 ))
   {
@@ -53,22 +63,31 @@ if( Str.contains( result, "" + (char)169 ))
               "" + (char)169, "(c)" );
   }
 
+if( Str.contains( result, "" + (char)173 ))
+  {
+  result = Str.replace( result,
+              "" + (char)173, "-" );
+  }
 
-/*
-  if( c == 173 )
-    c = '-';
+// Rights symbol
+if( Str.contains( result, "" + (char)174 ))
+  {
+  result = Str.replace( result,
+              "" + (char)174, "(R)" );
+  }
 
-  if( c == 174 ) // Rights symbol
-    continue;
+// A little circle.
+if( Str.contains( result, "" + (char)176 ))
+  {
+  result = Str.replace( result,
+              "" + (char)176, "(*)" );
+  }
 
-  if( c == 176 ) // Little circle
-    continue;
-
-  if( c == 177 ) // +- symbol
-    continue;
-
-
-*/
+if( Str.contains( result, "" + (char)177 ))
+  {
+  result = Str.replace( result,
+              "" + (char)177, "+/-" );
+  }
 
 if( Str.contains( result, "" + (char)180 ))
   {
@@ -94,6 +113,13 @@ if( Str.contains( result, "" + (char)190 ))
               "" + (char)190, "3/4" );
   }
 
+// Upside down question mark.
+if( Str.contains( result, "" + (char)191 ))
+  {
+  result = Str.replace( result,
+              "" + (char)191, "(?)" );
+  }
+
 if( Str.contains( result, "" + (char)194 ))
   {
   result = Str.replace( result,
@@ -104,6 +130,12 @@ if( Str.contains( result, "" + (char)201 ))
   {
   result = Str.replace( result,
               "" + (char)201, "E" );
+  }
+
+if( Str.contains( result, "" + (char)205 ))
+  {
+  result = Str.replace( result,
+              "" + (char)205, "I" );
   }
 
 if( Str.contains( result, "" + (char)214 ))
@@ -233,11 +265,11 @@ if( Str.contains( result, "" + (char)246 ))
               "" + (char)246, "o" );
   }
 
-
-/*
-  if( c == 248 ) // Sort of a Phi.
-    continue;
-*/
+if( Str.contains( result, "" + (char)248 ))
+  {
+  result = Str.replace( result,
+              "" + (char)248, "(Phi)" );
+  }
 
 if( Str.contains( result, "" + (char)249 ))
   {
@@ -269,6 +301,11 @@ if( Str.contains( result, "" + (char)257 ))
               "" + (char)257, "a" );
   }
 
+if( Str.contains( result, "" + (char)259 ))
+  {
+  result = Str.replace( result,
+              "" + (char)259, "a" );
+  }
 
 if( Str.contains( result, "" + (char)263 ))
   {
@@ -300,6 +337,18 @@ if( Str.contains( result, "" + (char)287 ))
               "" + (char)287, "g" );
   }
 
+if( Str.contains( result, "" + (char)299 ))
+  {
+  result = Str.replace( result,
+              "" + (char)299, "i" );
+  }
+
+if( Str.contains( result, "" + (char)304 ))
+  {
+  result = Str.replace( result,
+              "" + (char)304, "I" );
+  }
+
 if( Str.contains( result, "" + (char)333 ))
   {
   result = Str.replace( result,
@@ -312,10 +361,28 @@ if( Str.contains( result, "" + (char)347 ))
               "" + (char)347, "s" );
   }
 
+if( Str.contains( result, "" + (char)363 ))
+  {
+  result = Str.replace( result,
+              "" + (char)363, "u" );
+  }
+
 if( Str.contains( result, "" + (char)380 ))
   {
   result = Str.replace( result,
               "" + (char)380, "z" );
+  }
+
+if( Str.contains( result, "" + (char)382 ))
+  {
+  result = Str.replace( result,
+              "" + (char)382, "z" );
+  }
+
+if( Str.contains( result, "" + (char)537 ))
+  {
+  result = Str.replace( result,
+              "" + (char)537, "s" );
   }
 
 if( Str.contains( result, "" + (char)699 ))
@@ -336,6 +403,20 @@ if( Str.contains( result, "" + (char)1057 ))
               "" + (char)1057, "C" );
   }
 
+// Canadian Aboriginal Syllabics 
+// Weird upside down comma that causes problems.
+if( Str.contains( result, "" + (char)1548 ))
+  {
+  result = Str.replace( result,
+              "" + (char)1548, "(,)" );
+  }
+
+if( Str.contains( result, "" + (char)7717 ))
+  {
+  result = Str.replace( result,
+              "" + (char)7717, "h" );
+  }
+
 if( Str.contains( result, "" + (char)8201 ))
   {
   result = Str.replace( result,
@@ -348,7 +429,6 @@ if( Str.contains( result, "" + (char)8202 ))
               "" + (char)8202, " " );
   }
 
-
 // Not showing.
 if( Str.contains( result, "" + (char)8203 ))
   {
@@ -356,13 +436,18 @@ if( Str.contains( result, "" + (char)8203 ))
               "" + (char)8203, " " );
   }
 
+// Not showing.
+if( Str.contains( result, "" + (char)8206 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8206, " " );
+  }
 
-/*
-  if( c == 8208 ) // dash or hyphen?
-    c = '-';
-
-*/
-
+if( Str.contains( result, "" + (char)8208 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8208, "-" );
+  }
 
 if( Str.contains( result, "" + (char)8211 ))
   {
@@ -376,12 +461,11 @@ if( Str.contains( result, "" + (char)8212 ))
               "" + (char)8212, "-" );
   }
 
-
-/*
-  if( c == 8213 ) // dash or hyphen?
-    c = '-';
-
-*/
+if( Str.contains( result, "" + (char)8213 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8213, "-" );
+  }
 
 
 if( Str.contains( result, "" + (char)8216 ))
@@ -429,27 +513,51 @@ if( Str.contains( result, "" + (char)8239 ))
               "" + (char)8239, " " );
   }
 
+if( Str.contains( result, "" + (char)8243 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8243, "\"" );
+  }
+
+// Not showing
+if( Str.contains( result, "" + (char)8288 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8288, " " );
+  }
+
 if( Str.contains( result, "" + (char)8294 ))
   {
   result = Str.replace( result,
               "" + (char)8294, "[LRI]" );
   }
 
+// CJK Unified Ideograp
 if( Str.contains( result, "" + (char)8297 ))
   {
   result = Str.replace( result,
               "" + (char)8297, "[PDI]" );
   }
 
-
-// Trademark.
-/*
-if( Str.contains( result, "" + (char)8492 ))
+if( Str.contains( result, "" + (char)8364 ))
   {
   result = Str.replace( result,
-              "" + (char)8492, "(Tr)" );
+              "" + (char)8364, "(euro$)" );
   }
-*/
+
+if( Str.contains( result, "" + (char)8457 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8457, "(Farenheit)" );
+  }
+
+
+// Trademark.
+if( Str.contains( result, "" + (char)8482 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8482, "(Tm)" );
+  }
 
 if( Str.contains( result, "" + (char)8531 ))
   {
@@ -457,10 +565,22 @@ if( Str.contains( result, "" + (char)8531 ))
               "" + (char)8531, "1/3" );
   }
 
+if( Str.contains( result, "" + (char)8532 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8532, "2/3" );
+  }
+
 if( Str.contains( result, "" + (char)8539 ))
   {
   result = Str.replace( result,
               "" + (char)8539, "1/8" );
+  }
+
+if( Str.contains( result, "" + (char)9654 ))
+  {
+  result = Str.replace( result,
+              "" + (char)9654, "(triangle*)" );
   }
 
 

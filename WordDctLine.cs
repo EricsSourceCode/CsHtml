@@ -48,7 +48,7 @@ valueArray[0] = new Word( mData, "" );
 }
 catch( Exception ) // Except )
   {
-  throw new Exception( 
+  throw new Exception(
        "Not enough memory for WordDctLine." );
 
   }
@@ -115,13 +115,16 @@ catch( Exception ) // Except )
 
 private int getPositionOfWord( string word )
 {
+if( word == null )
+  return -1;
+
 if( arrayLast < 1 )
   return -1;
 
 int max = arrayLast;
 for( int count = 0; count < max; count++ )
   {
-  if( valueArray[count].getWord() == word )
+  if( valueArray[count].wordIsEqual( word ))
     return count;
 
   }
@@ -297,6 +300,3 @@ valueArray[pos].incCount();
 
 
 } // Class
-
-
-

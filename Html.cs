@@ -348,25 +348,25 @@ result = Str.replace( result, "<![CDATA[",
                "" + MarkersAI.BeginCData );
 
 result = Str.replace( result, "]]>",
-            "\r\n\r\n\r\n" + MarkersAI.EndCData );
+               "" + MarkersAI.EndCData );
 
 result = Str.replace( result, "<script",
                "" + MarkersAI.BeginScript );
 
 result = Str.replace( result, "</script>",
-        "\r\n\r\n\r\n" + MarkersAI.EndScript );
+               "" + MarkersAI.EndScript );
 
 result = Str.replace( result, "<!--",
                "" + MarkersAI.BeginHtmlComment );
 
 result = Str.replace( result, "-->",
-     "\r\n\r\n\r\n" + MarkersAI.EndHtmlComment );
+               "" + MarkersAI.EndHtmlComment );
 
 result = Str.replace( result, "<style",
-     "\r\n\r\n\r\n" + MarkersAI.StyleTagStart );
+               "" + MarkersAI.StyleTagStart );
 
 result = Str.replace( result, "</style>",
-     "\r\n\r\n\r\n" + MarkersAI.StyleTagEnd );
+               "" + MarkersAI.StyleTagEnd );
 
 
 
@@ -462,7 +462,7 @@ for( int count = 0; count < last; count++ )
 
 htmlS = htmlBuild.toString();
 
-// Don't cleanAscii() for the Markers.
+// Don't cleanAscii() for the Markers here.
 
 markedUpS = result;
 
@@ -525,7 +525,7 @@ for( int count = 0; count < last; count++ )
     tagBuild.clear();
     tagBuild.appendChar( '<' );
 
-    addNonTagText( story, nonTagBuild, 
+    addNonTagText( story, nonTagBuild,
                    paragDct );
     continue;
     }
@@ -602,7 +602,6 @@ if( para.Length == 0 )
 // if( !GoodParag.isGoodParag( para ))
 //  return;
 
-======
 if( !paragDct.keyExists( para ))
   story.appendParaG( para );
 

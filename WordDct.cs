@@ -50,7 +50,7 @@ for( int count = 0; count < keySize; count++ )
 }
 catch( Exception ) // Except )
   {
-  throw new Exception( 
+  throw new Exception(
            "Not enough memory for WordDct." );
   }
 }
@@ -495,8 +495,8 @@ if( wordS.Length < 1 )
   return;
 
 int arIndex = getArIndex( wordS );
-if( arIndex < minArIndex )
-  return;
+// if( arIndex < minArIndex )
+  // return;
 
 if( lineArray[arIndex].keyExists( wordS ))
   {
