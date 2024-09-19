@@ -120,6 +120,12 @@ if( Str.contains( result, "" + (char)191 ))
               "" + (char)191, "(?)" );
   }
 
+if( Str.contains( result, "" + (char)193 ))
+  {
+  result = Str.replace( result,
+              "" + (char)193, "A" );
+  }
+
 if( Str.contains( result, "" + (char)194 ))
   {
   result = Str.replace( result,
@@ -246,6 +252,11 @@ if( Str.contains( result, "" + (char)241 ))
               "" + (char)241, "n" );
   }
 
+if( Str.contains( result, "" + (char)242 ))
+  {
+  result = Str.replace( result,
+              "" + (char)242, "o" );
+  }
 
 if( Str.contains( result, "" + (char)243 ))
   {
@@ -349,6 +360,13 @@ if( Str.contains( result, "" + (char)304 ))
               "" + (char)304, "I" );
   }
 
+if( Str.contains( result, "" + (char)322 ))
+  {
+  // Small L with stroke.
+  result = Str.replace( result,
+              "" + (char)322, "l" );
+  }
+
 if( Str.contains( result, "" + (char)333 ))
   {
   result = Str.replace( result,
@@ -403,7 +421,7 @@ if( Str.contains( result, "" + (char)1057 ))
               "" + (char)1057, "C" );
   }
 
-// Canadian Aboriginal Syllabics 
+// Canadian Aboriginal Syllabics
 // Weird upside down comma that causes problems.
 if( Str.contains( result, "" + (char)1548 ))
   {

@@ -497,8 +497,8 @@ for( int count = 0; count < keySize; count++ )
 internal void neuralSearch( string toFindUrl,
                      string toFind,
                      double daysBack,
-                     FloatMatrix paragMatrix,
-                     FloatMatrix labelMatrix )
+                     VectorArray paragMatrix,
+                     VectorArray labelMatrix )
 {
 toFindUrl = Str.toLower( toFindUrl );
 toFind = Str.toLower( toFind );
@@ -570,6 +570,9 @@ for( int count = 0; count < keySize; count++ )
       throw new Exception(
         "StoryDct labelMatrix last append." );
       }
+
+==== Append two values.  One for dems one 
+for repubs.
 
     labelMatrix.appendOneVal( isDemocrat );
     string parags = story.getParagsVecText();

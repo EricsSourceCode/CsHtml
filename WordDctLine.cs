@@ -152,6 +152,10 @@ internal void setValueAnyID( Word value )
 
 string word = value.getWord();
 
+// the, and, by, a ...
+if( word.Length < 4 )
+  return;
+
 int pos = getPositionOfWord( word );
 if( pos >= 0 )
   {

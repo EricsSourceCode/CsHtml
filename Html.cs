@@ -501,7 +501,7 @@ bool isInsideTag = false;
 int last = htmlS.Length;
 for( int count = 0; count < last; count++ )
   {
-  if( (count % 50) == 0 )
+  if( (count % 2000) == 0 )
     {
     if( !mData.checkEvents())
       return false;
@@ -517,8 +517,11 @@ for( int count = 0; count < last; count++ )
       mData.showStatus( " " );
       mData.showStatus(
                    "< Already inside tag." );
-      // mData.showStatus( showTag );
+      string showLinkTag = tagBuild.toString();
+      // Don't clear tagBuild here.
+      mData.showStatus( showLinkTag );
       mData.showStatus( " " );
+      continue; // Ignore this in a Link tag.
       }
 
     isInsideTag = true;
@@ -532,8 +535,24 @@ for( int count = 0; count < last; count++ )
 
   if( testC == '>' )
     {
+    string showText = "";
+
+    if( !isInsideTag )
+      {
+      mData.showStatus( " " );
+      mData.showStatus(
+                   "Not already inside tag." );
+
+      // Not clearing this here (?)
+      showText = nonTagBuild.toString();
+
+      mData.showStatus( showText );
+      mData.showStatus( " " );
+      continue; // Ignore it here.
+      }
+
     tagBuild.appendChar( '>' );
-    string showTag = tagBuild.toString();
+    showText = tagBuild.toString();
 
     // The text of the anchor tag is already
     // non tag text.  It is after the anchor
@@ -542,18 +561,6 @@ for( int count = 0; count < last; count++ )
       // mData.showStatus( "<a>" );
 
     tagBuild.clear();
-
-    if( !isInsideTag )
-      {
-      mData.showStatus( " " );
-      mData.showStatus(
-                   "Not already inside tag." );
-      string showNonTag = nonTagBuild.toString();
-
-      mData.showStatus( showNonTag );
-      mData.showStatus( " " );
-      }
-
     isInsideTag = false;
     continue;
     }

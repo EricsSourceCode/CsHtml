@@ -57,15 +57,6 @@ catch( Exception ) // Except )
 
 
 
-/*
-internal void freeAll()
-{
-// resize()
-}
-*/
-
-
-
 internal void clear()
 {
 for( int count = 0; count < keySize; count++ )
@@ -157,8 +148,9 @@ string word = value.getWord();
 if( word == null )
   return;
 
-if( word.Length < 1 )
-  return;
+// See this in WordDctLine
+// the, and, by, a ...
+// if( word.Length < 4 )
 
 int arIndex = getArIndex( word );
 
@@ -242,6 +234,14 @@ int last = lines.getLast();
 
 for( int count = 0; count < last; count++ )
   {
+  if( (count % 100) == 0 )
+    {
+    mData.showStatus( "Reading words..." );
+    if( !mData.checkEvents())
+      return;
+
+    }
+
   string line = lines.getStrAt( count );
   // line = Str.trim( line );
 
@@ -286,7 +286,7 @@ SysIO.writeAllText( fileName, toWrite );
 
 
 
-internal void writeAllToFile()
+internal void writeAllToFile( int minCount )
 {
 SBuilder sBuild = new SBuilder();
 
@@ -297,7 +297,7 @@ Word word = new Word( mData, "" );
 int howMany = 0;
 for( int count = 0; count < keySize; count++ )
   {
-  if( (count % 20) == 0 )
+  if( (count % 100) == 0 )
     {
     if( !mData.checkEvents())
       return;
@@ -323,6 +323,9 @@ for( int count = 0; count < keySize; count++ )
       throw new Exception(
                 "Word valid index on write." );
       }
+
+    if( word.getCount() < minCount )
+      continue;
 
     // ulong dateIndex = story.getDateIndex();
     // if( dateIndex < oldIndex )
@@ -631,7 +634,7 @@ for( int count = 0; count < keySize; count++ )
   mData.showStatus( "Count: " + count );
   mData.showStatus( " " );
 
-  if( (count % 20) == 0 )
+  if( (count % 100) == 0 )
     {
     if( !mData.checkEvents())
       return;
