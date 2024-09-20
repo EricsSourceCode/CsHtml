@@ -514,10 +514,16 @@ ulong oldIndex = oldTime.getIndex();
 
 int howMany = 0;
 
+
 paragMatrix.clearLastAppend();
 labelMatrix.clearLastAppend();
 
+int labelCol = labelMatrix.getColumns();
+VectorFlt labelSet = new VectorFlt( mData );
+labelSet.setSize( labelCol );
+
 float isDemocrat = 1;
+float isRepub = 1;
 Story story = new Story( mData );
 for( int count = 0; count < keySize; count++ )
   {
@@ -553,9 +559,15 @@ for( int count = 0; count < keySize; count++ )
       continue;
 
     if( Str.contains( url, "msnbc" ))
+      {
       isDemocrat = 1;
+      isRepub = 0;
+      }
     else
+      {
       isDemocrat = 0;
+      isRepub = 1;
+      }
 
     string linkText = story.getLinkText();
     string linkTextLower =
@@ -571,10 +583,12 @@ for( int count = 0; count < keySize; count++ )
         "StoryDct labelMatrix last append." );
       }
 
-==== Append two values.  One for dems one 
-for repubs.
+    labelSet.clearZeros();
+    labelSet.setVal( 1, isDemocrat );
+    labelSet.setVal( 2, isRepub );
 
-    labelMatrix.appendOneVal( isDemocrat );
+    labelMatrix.appendVecCopy( labelSet );
+
     string parags = story.getParagsVecText();
     paragMatrix.appendFromString( parags );
     }

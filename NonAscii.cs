@@ -485,7 +485,6 @@ if( Str.contains( result, "" + (char)8213 ))
               "" + (char)8213, "-" );
   }
 
-
 if( Str.contains( result, "" + (char)8216 ))
   {
   result = Str.replace( result,
@@ -509,7 +508,6 @@ if( Str.contains( result, "" + (char)8221 ))
   result = Str.replace( result,
               "" + (char)8221, "\"" );
   }
-
 
 // a Dot.
 if( Str.contains( result, "" + (char)8226 ))
@@ -569,7 +567,6 @@ if( Str.contains( result, "" + (char)8457 ))
               "" + (char)8457, "(Farenheit)" );
   }
 
-
 // Trademark.
 if( Str.contains( result, "" + (char)8482 ))
   {
@@ -600,7 +597,6 @@ if( Str.contains( result, "" + (char)9654 ))
   result = Str.replace( result,
               "" + (char)9654, "(triangle*)" );
   }
-
 
 return result;
 }
