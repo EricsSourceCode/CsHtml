@@ -23,6 +23,20 @@ public class NonAscii
 // private MainData mData;
 
 
+internal static bool hasNonAscii( string inS )
+{
+int max = inS.Length;
+for( int count = 0; count < max; count++ )
+  {
+  if( inS[count] > (char)127 )
+    return true;
+
+  }
+
+return false;
+}
+
+
 
 internal static string fixIt( string inS )
 {
@@ -30,6 +44,10 @@ string result = inS;
 
 if( result.Length < 1 )
   return "";
+
+if( !hasNonAscii( result ))
+  return result;
+
 
 // Just blank.
 if( Str.contains( result, "" + (char)160 ))
@@ -522,6 +540,12 @@ if( Str.contains( result, "" + (char)8230 ))
               "" + (char)8230, "..." );
   }
 
+if( Str.contains( result, "" + (char)8232 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8232, "(LSEP)" );
+  }
+
 // Not showing.
 if( Str.contains( result, "" + (char)8239 ))
   {
@@ -590,6 +614,12 @@ if( Str.contains( result, "" + (char)8539 ))
   {
   result = Str.replace( result,
               "" + (char)8539, "1/8" );
+  }
+
+if( Str.contains( result, "" + (char)8722 ))
+  {
+  result = Str.replace( result,
+              "" + (char)8722, "-" );
   }
 
 if( Str.contains( result, "" + (char)9654 ))

@@ -488,7 +488,6 @@ cDataS = cDataBuild.toString();
 
 
 
-
 internal bool makeStory( Story story,
                          WordDct paragDct )
 {
