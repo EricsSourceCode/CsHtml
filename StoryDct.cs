@@ -494,14 +494,14 @@ for( int count = 0; count < keySize; count++ )
 
 
 
-internal void neuralSearch( string toFindUrl,
-                     string toFind,
+internal void neuralSearch( // string toFindUrl,
+                     // string toFind,
                      double daysBack,
                      VectorArray paragMatrix,
                      VectorArray labelMatrix )
 {
-toFindUrl = Str.toLower( toFindUrl );
-toFind = Str.toLower( toFind );
+// toFindUrl = Str.toLower( toFindUrl );
+// toFind = Str.toLower( toFind );
 
 TimeEC timeEC = new TimeEC();
 TimeEC oldTime = new TimeEC();
@@ -555,8 +555,9 @@ for( int count = 0; count < keySize; count++ )
 
     string url = story.getUrl();
     url = Str.toLower( url );
-    if( !Str.contains( url, toFindUrl ))
-      continue;
+
+    // if( !Str.contains( url, toFindUrl ))
+      // continue;
 
     if( Str.contains( url, "msnbc" ))
       {
@@ -569,12 +570,12 @@ for( int count = 0; count < keySize; count++ )
       isRepub = 1;
       }
 
-    string linkText = story.getLinkText();
-    string linkTextLower =
-                      Str.toLower( linkText );
+    // string linkText = story.getLinkText();
+    // string linkTextLower =
+    //                  Str.toLower( linkText );
 
-    if( !Str.contains( linkTextLower, toFind ))
-      continue;
+    // if( !Str.contains( linkTextLower, toFind ))
+      // continue;
 
     int lastAppend = paragMatrix.getLastAppend();
     if( lastAppend != labelMatrix.getLastAppend())

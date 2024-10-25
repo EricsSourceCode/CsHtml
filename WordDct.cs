@@ -1,3 +1,5 @@
+/*
+
 // Copyright Eric Chauvin 2024.
 
 
@@ -347,7 +349,7 @@ mData.showStatus( "Finished writing file." );
 
 
 
-/*
+///////////
 Break a sentence in to separate words and
 add each word separately.
 
@@ -380,10 +382,12 @@ for( int count = 0; count < last; count++ )
   addWord( word );
   }
 }
-*/
+//////////
 
 
-/*
+
+
+////////////
 internal string removePunctuation( string word )
 {
 string result = "";
@@ -470,11 +474,11 @@ for( int count = 0; count < last; count++ )
 
 return result;
 }
-*/
+/////////
 
 
 
-/*
+//////////
 internal bool isBadWord( string word )
 {
 // An email address:
@@ -483,7 +487,7 @@ if( Str.contains( word, "@" ))
 
 return false;
 }
-*/
+/////////
 
 
 
@@ -729,3 +733,5 @@ mData.showStatus( "Finished sort by count." );
 
 
 } // Class
+
+*/

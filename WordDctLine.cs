@@ -1,3 +1,6 @@
+/*
+
+
 // Copyright Eric Chauvin 2024.
 
 
@@ -55,13 +58,16 @@ catch( Exception ) // Except )
 }
 
 
-/*
+
+
+//////////
 internal void freeAll()
 {
 arrayLast = 0;
 resizeArrays( 1 );
 }
-*/
+/////////
+
 
 
 
@@ -304,3 +310,6 @@ valueArray[pos].incCount();
 
 
 } // Class
+
+*/
+
