@@ -488,7 +488,7 @@ cDataS = cDataBuild.toString();
 
 
 
-internal bool makeStory( Story story ) // ,
+internal bool makeWebPage( WebPage webPage ) // ,
                          // WordDct paragDct )
 {
 // SBuilder htmlBuild = new SBuilder();
@@ -527,7 +527,7 @@ for( int count = 0; count < last; count++ )
     tagBuild.clear();
     tagBuild.appendChar( '<' );
 
-    addNonTagText( story, nonTagBuild ); // ,
+    addNonTagText( webPage, nonTagBuild ); // ,
                    // paragDct );
     continue;
     }
@@ -576,7 +576,7 @@ return true;
 
 
 
-private void addNonTagText( Story story,
+private void addNonTagText( WebPage webPage,
                          SBuilder nonTagBuild )
                          // ,
                          // WordDct paragDct )
@@ -610,7 +610,7 @@ if( para.Length == 0 )
 //  return;
 
 // if( !paragDct.keyExists( para ))
-  story.appendParaG( para );
+  webPage.appendParaG( para );
 
 // Add the count if it already exists.
 // paragDct.addWord( para );
