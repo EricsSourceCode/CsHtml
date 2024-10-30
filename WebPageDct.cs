@@ -496,36 +496,13 @@ for( int count = 0; count < keySize; count++ )
 
 
 
-internal void neuralSearch( // string toFindUrl,
-                     // string toFind,
-                     double daysBack,
-                     VectorArray paragMatrix,
-                     VectorArray labelMatrix )
+internal void neuralSearch(
+                   VectorArray demParagArray,
+                   VectorArray repubParagArray )
 {
-// toFindUrl = Str.toLower( toFindUrl );
-// toFind = Str.toLower( toFind );
+demParagArray.clearLastAppend();
+repubParagArray.clearLastAppend();
 
-TimeEC timeEC = new TimeEC();
-TimeEC oldTime = new TimeEC();
-oldTime.setToNow();
-oldTime.addDays( daysBack );
-// addHours()
-ulong oldIndex = oldTime.getIndex();
-
-// mData.showStatus( "oldIndex: " + oldIndex );
-
-int howMany = 0;
-
-
-paragMatrix.clearLastAppend();
-labelMatrix.clearLastAppend();
-
-int labelCol = labelMatrix.getColumns();
-VectorFlt labelSet = new VectorFlt( mData );
-labelSet.setSize( labelCol );
-
-float isDemocrat = 1;
-float isRepub = 1;
 WebPage webPage = new WebPage( mData );
 for( int count = 0; count < keySize; count++ )
   {
@@ -536,64 +513,25 @@ for( int count = 0; count < keySize; count++ )
 
     }
 
-  howMany++;
-  if( howMany > 50000000 )
-    break;
-
   int last = lineArray[count].getArrayLast();
   if( last < 1 )
     continue;
 
-  // mData.showStatus( "Last: " + last );
   for( int countR = 0; countR < last; countR++ )
     {
     lineArray[count].getCopyWebPageAt( webPage,
                                      countR );
 
-    ulong linkDateIndex = webPage.getDateIndex();
-
-    if( linkDateIndex < oldIndex )
-      continue;
-
     string url = webPage.getUrl();
     url = Str.toLower( url );
 
-    // if( !Str.contains( url, toFindUrl ))
-      // continue;
+    string parags = webPage.getParagsVecText();
 
     if( Str.contains( url, "msnbc" ))
-      {
-      isDemocrat = 1;
-      isRepub = 0;
-      }
+      demParagArray.appendFromString( parags );
     else
-      {
-      isDemocrat = 0;
-      isRepub = 1;
-      }
+      repubParagArray.appendFromString( parags );
 
-    // string linkText = story.getLinkText();
-    // string linkTextLower =
-    //                  Str.toLower( linkText );
-
-    // if( !Str.contains( linkTextLower, toFind ))
-      // continue;
-
-    int lastAppend = paragMatrix.getLastAppend();
-    if( lastAppend != labelMatrix.getLastAppend())
-      {
-      throw new Exception(
-        "WebPageDct labelMatrix last append." );
-      }
-
-    labelSet.clearZeros();
-    labelSet.setVal( 1, isDemocrat );
-    labelSet.setVal( 2, isRepub );
-
-    labelMatrix.appendVecCopy( labelSet );
-
-    string parags = webPage.getParagsVecText();
-    paragMatrix.appendFromString( parags );
     }
   }
 }
