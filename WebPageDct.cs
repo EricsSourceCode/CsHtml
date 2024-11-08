@@ -519,6 +519,9 @@ for( int count = 0; count < keySize; count++ )
 
   for( int countR = 0; countR < last; countR++ )
     {
+    if( !mData.checkEvents())
+      return;
+
     lineArray[count].getCopyWebPageAt( webPage,
                                      countR );
 
@@ -526,6 +529,11 @@ for( int count = 0; count < keySize; count++ )
     url = Str.toLower( url );
 
     string parags = webPage.getParagsVecText();
+    if( parags.Length < 1000 )
+      continue;
+
+    // mData.showStatus( "Parags length: " +
+    //                    parags.Length );
 
     if( Str.contains( url, "msnbc" ))
       demParagArray.appendFromString( parags );
