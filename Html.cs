@@ -1,4 +1,4 @@
-// Copyright Eric Chauvin 2024.
+// Copyright Eric Chauvin 2024 - 2025.
 
 
 
@@ -15,6 +15,7 @@ using System;
 
 
 // namespace
+
 
 
 public class Html
@@ -34,6 +35,8 @@ private string javaS = "";
 private string cDataS = "";
 // private string styleS = "";
 // private string linkS = "";
+private TagSplit lastTagSpl;
+
 
 
 private Html()
@@ -54,6 +57,7 @@ urlParse = new UrlParse( mData, fromUrl );
 fileName = fileNameToUse;
 linkDate = new TimeEC( linkDateIndex );
 linkText = linkTextToUse;
+lastTagSpl = new TagSplit( mData );
 }
 
 
@@ -88,235 +92,6 @@ if( fileS.Length < 2 )
 
 
 
-/*
-internal void processAnchorTags()
-{
-mData.showStatus( "processAnchorTags()" );
-
-bool isInsideAnchor = false;
-
-urlParse.clear();
-
-// The link tag is for style sheets.
-
-StrAr tagParts = new StrAr();
-tagParts.split( htmlS, '<' );
-int last = tagParts.getLast();
-
-// string beforeFirst = tagParts.getStrAt( 0 );
-// mData.showStatus( "Before first: " +
-//                              beforeFirst );
-
-for( int count = 1; count < last; count++ )
-  {
-  string line = tagParts.getStrAt( count );
-
-  string lowerLine = Str.toLower( line );
-  if( !( Str.startsWith( lowerLine,
-                           tagAnchorStart ) ||
-         Str.startsWith( lowerLine,
-                           tagAnchorEnd ) ))
-    continue;
-
-  StrAr lineParts = new StrAr();
-  lineParts.split( line, '>' );
-  int lastPart = lineParts.getLast();
-  if( lastPart == 0 )
-    {
-    mData.showStatus(
-           "The tag doesn't have any parts." );
-    mData.showStatus( "line: " + line );
-    return;
-    }
-
-  if( lastPart > 2 )
-    {
-    // line: /span> Posting">Post comment
-    // mApp.showStatusAsync( "lastPart > 2." );
-    // mApp.showStatusAsync( "line: " + line );
-    continue;
-    }
-
-  string tag = lineParts.getStrAt( 0 );
-  // It's a short tag that I don't want to
-  // deal with yet.
-  if( Str.endsWith( tag, "/" ))
-    {
-    // if( tag.startsWithChar( 'a' ))
-    // mApp.showStatusAsync( "Short tag: " + tag );
-    continue;
-    }
-
-  StrAr tagAttr = new StrAr();
-  tagAttr.split( tag, ' ' );
-  int lastAttr = tagAttr.getLast();
-  if( lastAttr == 0 )
-    {
-    mData.showStatus(
-              "lastAttr is zero for the tag." );
-    mData.showStatus( "tag: " + tag );
-    return;
-    }
-
-  string tagName = tagAttr.getStrAt( 0 );
-  tagName = Str.toLower( tagName );
-
-  // mData.showStatus( "tagName: " + tagName );
-
-  if( tagName == tagAnchorStart )
-    {
-    isInsideAnchor = true;
-    urlParse.clear();
-
-    for( int countA = 1; countA < lastAttr;
-                                    countA++ )
-      {
-      string attr = tagAttr.getStrAt( countA );
-      attr = attr += " ";
-      urlParse.addRawText( attr );
-      }
-
-    urlParse.addRawText( " >" );
-    }
-
-  if( tagName == tagAnchorEnd )
-    {
-    if( urlParse.processLink())
-      {
-      string link = urlParse.getLink();
-      string linkText = urlParse.getLinkText();
-      if( linkText.Length > 0 )
-        {
-        mData.showStatus( "After UrlParse:" );
-        mData.showStatus( "LinkText: "
-                                 + linkText );
-        mData.showStatus( "Link: " + link );
-        // URLFile uFile = new URLFile( mApp,
-        //                   linkText, link );
-        // urlFileDictionary.setValue(
-        //      link, uFile );
-        }
-      }
-    }
-
-  if( isInsideAnchor )
-    {
-    if( lastPart >= 2 )
-      {
-      urlParse.addRawText(
-                    lineParts.getStrAt( 1 ));
-      }
-    }
-  }
-}
-*/
-
-
-
-/*
-private string fixSpanText( string inS )
-{
-if( !Str.contains( inS, "<span" ))
-  return inS;
-
-string result = inS;
-
-result = Str.replace( result, "<span>",
-                              "<span >" );
-
-// It could have a tag like <span >
-// or a tag like:
-// <span class="video-details__dek-description">
-
-result = Str.replace( result, "<span ",
-             "" + MarkersAI.BeginSpanTag );
-
-StrAr spanParts = new StrAr();
-spanParts.split( result,
-                 MarkersAI.BeginSpanTag );
-int lastSpan = spanParts.getLast();
-
-result = spanParts.getStrAt( 0 ) + " ";
-
-for( int count = 1; count < lastSpan; count++ )
-  {
-  string spanPart =
-              spanParts.getStrAt( count );
-
-  spanPart = Str.removeUpToC( spanPart, '>' );
-  result += " " + spanPart;
-  }
-
-result = Str.replace( result, "  ", " " );
-result = Str.replace( result, "  ", " " );
-return result;
-}
-*/
-
-
-
-/*
-private string fixAnchorText( string inS )
-{
-if( !Str.contains( inS,
-               "" + MarkersAI.BeginAnchorTag ))
-  return inS;
-
-StrAr paraParts = new StrAr();
-paraParts.split( inS, MarkersAI.BeginAnchorTag );
-int lastPara = paraParts.getLast();
-
-// if( lastPara < 2 )
-  // return inS;
-
-string result = paraParts.getStrAt( 0 ) + " ";
-
-for( int count = 1; count < lastPara; count++ )
-  {
-  string anchorPart =
-              paraParts.getStrAt( count );
-
-  if( !Str.contains( anchorPart,
-                  "" + MarkersAI.EndAnchorTag ))
-    {
-    return "No ending anchor match.";
-    // result += anchorPart;
-    // break;
-    }
-
-  StrAr anchorLines = new StrAr();
-  anchorLines.split( anchorPart,
-                     MarkersAI.EndAnchorTag );
-  int lastAnchor = anchorLines.getLast();
-  if( lastAnchor < 2 )
-    return "lastAnchor < 2";
-
-  string hrefPart = anchorLines.getStrAt( 0 );
-  string textPart = anchorLines.getStrAt( 1 );
-  // mData.showStatus( " " );
-  // mData.showStatus( "hrefPart: " + hrefPart );
-
-  StrAr hrefLines = new StrAr();
-  hrefLines.split( hrefPart, '>' );
-  int lastHref = hrefLines.getLast();
-  if( lastHref < 2 )
-    return "lastHref < 2";
-
-  string hrefText = hrefLines.getStrAt( 1 );
-  // mData.showStatus( " " );
-  // mData.showStatus( "hrefText: " + hrefText );
-
-  result += hrefText + " " + textPart;
-  }
-
-result = Str.replace( result, "  ", " " );
-return result;
-}
-*/
-
-
-
-
 internal void markupSections()
 {
 SBuilder scrBuild = new SBuilder();
@@ -327,8 +102,8 @@ SBuilder cDataBuild = new SBuilder();
 
 // CData can be commented out within a script:
 // slash star  ]]><![CDATA[  star slash.
-// It is to make it so it's not interpreted
-// as HTML.  But it's within a script.
+// It is to make it so it's not interpreted.
+// But it's within a script.
 // And then the script interprets the CData
 // begin and end markers as something within
 // star slash comments.  To be ignored.
@@ -534,8 +309,6 @@ for( int count = 0; count < last; count++ )
 
   if( testC == '>' )
     {
-    string showText = "";
-
     if( !isInsideTag )
       {
       mData.showStatus( " " );
@@ -543,7 +316,7 @@ for( int count = 0; count < last; count++ )
                    "Not already inside tag." );
 
       // Not clearing this here (?)
-      showText = nonTagBuild.toString();
+      string showText = nonTagBuild.toString();
 
       mData.showStatus( showText );
       mData.showStatus( " " );
@@ -551,7 +324,8 @@ for( int count = 0; count < last; count++ )
       }
 
     tagBuild.appendChar( '>' );
-    showText = tagBuild.toString();
+    lastTagSpl.setTagText( 
+                    tagBuild.toString() );
 
     // The text of the anchor tag is already
     // non tag text.  It is after the anchor
@@ -581,6 +355,11 @@ private void addNonTagText( WebPage webPage,
                          // ,
                          // WordDct paragDct )
 {
+if( !lastTagSpl.isTagToShow())
+  {
+  nonTagBuild.clear();
+  return;
+  }
 // A paragraph or heading or something that
 // is not inside any tags.
 
@@ -601,6 +380,9 @@ para = Str.replace( para, "\r", " " );
 para = Str.replace( para, "\n", " " );
 // para = Str.cleanAscii( para );
 
+// mData.showStatus( " " );
+// mData.showStatus( "addNonTagText()" );
+
 // Trim it again.
 para = Str.trim( para );
 if( para.Length == 0 )
@@ -608,6 +390,11 @@ if( para.Length == 0 )
 
 // if( !GoodParag.isGoodParag( para ))
 //  return;
+
+string showText = lastTagSpl.getTagText() +
+                         "\r\n" + para;
+mData.showStatus( " " );
+mData.showStatus( showText );
 
 // if( !paragDct.keyExists( para ))
   webPage.appendParaG( para );

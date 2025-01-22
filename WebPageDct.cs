@@ -1,4 +1,4 @@
-// Copyright Eric Chauvin 2024.
+// Copyright Eric Chauvin 2024 - 2025.
 
 
 
@@ -182,7 +182,7 @@ internal void readAllFromFile()
 {
 clear();
 
-string fileName = mData.getStoriesFileName();
+string fileName = mData.getWebPageDctFileName();
 
 mData.showStatus( "Reading file:" );
 mData.showStatus( fileName );
@@ -196,7 +196,7 @@ if( !SysIO.directoryExists(
 
 if( !SysIO.fileExists( fileName ))
   {
-  mData.showStatus( "No stories file." );
+  mData.showStatus( "No web pages file." );
   return;
   }
 
@@ -343,7 +343,7 @@ mData.showStatus( "\r\nParagraph count: " +
 
 internal void writeFileS( string toWrite )
 {
-string fileName = mData.getStoriesFileName();
+string fileName = mData.getWebPageDctFileName();
 
 if( !SysIO.directoryExists(
                   mData.getDataDirectory()))
