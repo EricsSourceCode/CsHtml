@@ -1,6 +1,6 @@
 /*
 
-Can this do a thread for reading each story 
+Can this do a thread for reading each story
 file?  How do I get the one story back
 from that separate thread?
 
@@ -29,6 +29,8 @@ public class ThreadWork
       }
    }
 }
+
+
 class ThreadTest
 {
    public static void Main()
@@ -51,4 +53,3 @@ class ThreadTest
 
 
 */
-

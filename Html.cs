@@ -28,14 +28,14 @@ private string linkText = "";
 // Where this HTML file came from:
 private string fromUrl = "";
 // private Paragraph paragraph;
-private UrlParse urlParse;
+// private UrlParse urlParse;
 private string markedUpS = "";
 private string htmlS = "";
 private string javaS = "";
 private string cDataS = "";
 // private string styleS = "";
 // private string linkS = "";
-private TagSplit lastTagSpl;
+// private BadNewsTags badNewsTags;
 
 
 
@@ -52,12 +52,12 @@ public Html( MainData useMData,
 {
 mData = useMData;
 fromUrl = useUrl;
-urlParse = new UrlParse( mData, fromUrl );
+// urlParse = new UrlParse( mData, fromUrl );
 // paragraph = new Paragraph( mData, fromUrl );
 fileName = fileNameToUse;
 linkDate = new TimeEC( linkDateIndex );
 linkText = linkTextToUse;
-lastTagSpl = new TagSplit( mData );
+// badNewsTags = new BadNewsTags( mData );
 }
 
 
@@ -263,13 +263,13 @@ cDataS = cDataBuild.toString();
 
 
 
-internal bool makeWebPage( WebPage webPage ) // ,
-                         // WordDct paragDct )
+internal bool makeWebPage( WebPage webPage,
+                           WordDct tagsDct )
 {
 // SBuilder htmlBuild = new SBuilder();
 SBuilder tagBuild = new SBuilder();
 SBuilder nonTagBuild = new SBuilder();
-
+string lastTag = "";
 bool isInsideTag = false;
 
 int last = htmlS.Length;
@@ -302,8 +302,8 @@ for( int count = 0; count < last; count++ )
     tagBuild.clear();
     tagBuild.appendChar( '<' );
 
-    addNonTagText( webPage, nonTagBuild ); // ,
-                   // paragDct );
+    addNonTagText( webPage, nonTagBuild );
+                   // tagsDct );
     continue;
     }
 
@@ -324,15 +324,9 @@ for( int count = 0; count < last; count++ )
       }
 
     tagBuild.appendChar( '>' );
-    lastTagSpl.setTagText( 
-                    tagBuild.toString() );
-
-    // The text of the anchor tag is already
-    // non tag text.  It is after the anchor
-    // start tag.
-    // if( Str.startsWith( showTag, "<a " ))
-      // mData.showStatus( "<a>" );
-
+    lastTag = tagBuild.toString();
+    // Add the count if it already exists.
+    tagsDct.addWord( lastTag );
     tagBuild.clear();
     isInsideTag = false;
     continue;
@@ -350,22 +344,21 @@ return true;
 
 
 
+
 private void addNonTagText( WebPage webPage,
                          SBuilder nonTagBuild )
-                         // ,
-                         // WordDct paragDct )
 {
-if( !lastTagSpl.isTagToShow())
-  {
-  nonTagBuild.clear();
-  return;
-  }
+// if( badNewsTags.isBadTag())
+  // {
+  // nonTagBuild.clear();
+  // return;
+  // }
+
 // A paragraph or heading or something that
 // is not inside any tags.
 
 string para = nonTagBuild.toString();
 nonTagBuild.clear();
-
 para = Str.trim( para );
 if( para.Length < 1 )
   return;
@@ -380,27 +373,20 @@ para = Str.replace( para, "\r", " " );
 para = Str.replace( para, "\n", " " );
 // para = Str.cleanAscii( para );
 
-// mData.showStatus( " " );
-// mData.showStatus( "addNonTagText()" );
-
 // Trim it again.
+
 para = Str.trim( para );
 if( para.Length == 0 )
   return;
 
-// if( !GoodParag.isGoodParag( para ))
-//  return;
-
-string showText = lastTagSpl.getTagText() +
-                         "\r\n" + para;
-mData.showStatus( " " );
-mData.showStatus( showText );
+// string showText = badNewsTags.getTagText() +
+//                    "\r\n" + para;
+// mData.showStatus( " " );
+// mData.showStatus( showText );
 
 // if( !paragDct.keyExists( para ))
-  webPage.appendParaG( para );
 
-// Add the count if it already exists.
-// paragDct.addWord( para );
+webPage.appendParaG( para );
 }
 
 
