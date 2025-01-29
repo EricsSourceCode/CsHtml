@@ -326,6 +326,11 @@ for( int count = 0; count < last; count++ )
     tagBuild.appendChar( '>' );
     lastTag = tagBuild.toString();
     // Add the count if it already exists.
+    lastTag = Str.replace( lastTag, "<", "" );
+ 
+    if( lastTag.Length >= 26 )
+      lastTag = lastTag.Substring( 0, 25 );
+
     tagsDct.addWord( lastTag );
     tagBuild.clear();
     isInsideTag = false;
