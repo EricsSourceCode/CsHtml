@@ -35,8 +35,8 @@ private string javaS = "";
 private string cDataS = "";
 // private string styleS = "";
 // private string linkS = "";
-// private BadNewsTags badNewsTags;
-
+private BadNewsTags badNewsTags;
+private BadText badText;
 
 
 private Html()
@@ -57,7 +57,8 @@ fromUrl = useUrl;
 fileName = fileNameToUse;
 linkDate = new TimeEC( linkDateIndex );
 linkText = linkTextToUse;
-// badNewsTags = new BadNewsTags( mData );
+badNewsTags = new BadNewsTags( mData );
+badText = new BadText( mData );
 }
 
 
@@ -263,8 +264,9 @@ cDataS = cDataBuild.toString();
 
 
 
-internal bool makeWebPage( WebPage webPage,
-                           WordDct tagsDct )
+internal bool makeWebPage( WebPage webPage // ,
+                           // WordDct tagsDct
+                           )
 {
 // SBuilder htmlBuild = new SBuilder();
 SBuilder tagBuild = new SBuilder();
@@ -325,13 +327,22 @@ for( int count = 0; count < last; count++ )
 
     tagBuild.appendChar( '>' );
     lastTag = tagBuild.toString();
+
+    badNewsTags.setTagText( lastTag );
+
     // Add the count if it already exists.
+
     lastTag = Str.replace( lastTag, "<", "" );
- 
+
+    // The second parameter is max length.
+
     if( lastTag.Length >= 26 )
       lastTag = lastTag.Substring( 0, 25 );
 
-    tagsDct.addWord( lastTag );
+    // Add the count if it already exists.
+
+    // tagsDct.addWord( lastTag );
+
     tagBuild.clear();
     isInsideTag = false;
     continue;
@@ -353,20 +364,46 @@ return true;
 private void addNonTagText( WebPage webPage,
                          SBuilder nonTagBuild )
 {
-// if( badNewsTags.isBadTag())
-  // {
-  // nonTagBuild.clear();
-  // return;
-  // }
+string textToAdd = nonTagBuild.toString();
+textToAdd = Str.trim( textToAdd );
+
+nonTagBuild.clear();
+
+if( textToAdd.Length == 0 )
+  return;
+
+string lastTag = badNewsTags.getTagText();
+
+if( badNewsTags.isBadTag())
+  return;
+
+/*
+// Show what it thinks are good tags.
+if( !badNewsTags.isBadTag())
+  {
+  mData.showStatus( " " );
+  mData.showStatus( "Tag:" );
+  mData.showStatus( lastTag );
+  mData.showStatus( "textToAdd:" );
+  mData.showStatus( textToAdd );
+  return;
+  }
+*/
+
+if( badText.isBadText( textToAdd ))
+  {
+  // mData.showStatus( " " );
+  // mData.showStatus( "Bad text:" );
+  // mData.showStatus( textToAdd );
+  // mData.showStatus( lastTag );
+  return;
+  }
+
 
 // A paragraph or heading or something that
 // is not inside any tags.
 
-string para = nonTagBuild.toString();
-nonTagBuild.clear();
-para = Str.trim( para );
-if( para.Length < 1 )
-  return;
+string para = textToAdd;
 
 // mData.showStatus( " " );
 // mData.showStatus( "addNonTagText()" );
@@ -383,13 +420,6 @@ para = Str.replace( para, "\n", " " );
 para = Str.trim( para );
 if( para.Length == 0 )
   return;
-
-// string showText = badNewsTags.getTagText() +
-//                    "\r\n" + para;
-// mData.showStatus( " " );
-// mData.showStatus( showText );
-
-// if( !paragDct.keyExists( para ))
 
 webPage.appendParaG( para );
 }
